@@ -1,0 +1,2 @@
+cmd: Get-FileHash .\SoulSMP-2.2.zip -Algorithm sha1
+sha-1 hash: CD434C3F3CB3ADFFC29428CFA8A52281D379FF37

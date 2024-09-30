@@ -1,0 +1,10 @@
+{
+	"parent": "item/handheld",
+	"textures": {
+		"layer0": "item/golden_shovel",
+		"particle": "item/golden_shovel"
+	},
+	"overrides": [
+		{ "predicate": { "custom_model_data": 1}, "model": "item/golden_shovel/1" }
+	]
+}

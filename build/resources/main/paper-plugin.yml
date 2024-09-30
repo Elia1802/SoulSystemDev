@@ -1,0 +1,17 @@
+name: SoulBossSystem-Test
+bootstrapper: de.elia.BootsTrapper
+loader: de.elia.Loader
+main: de.elia.Main
+api-version: '1.21'
+version: '1.0.0-BETA'
+authors:
+  - Elia
+  - D1p4k
+  - Zopnote
+  - Sinan
+description: This plugin was written for SoulSMP. I put a lot of effort into it and I hope you really like it.
+  I know this plugin changes the entire server, but sometimes a change is important. This plugin
+  ensures that you can earn your own bossfight. But since I still need a lot of ideas, feel free
+  to write an idea with the command /mobidea an idea.
+permissions:
+has-open-classloader: true

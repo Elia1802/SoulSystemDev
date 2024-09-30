@@ -1,0 +1,12 @@
+{
+	"parent": "item/generated",
+	"textures": {
+		"layer0": "item/gunpowder"
+	},
+	"overrides": [
+		{ "predicate": { "custom_model_data": 1}, "model": "item/gunpowder/1" },
+		{ "predicate": { "custom_model_data": 2}, "model": "item/gunpowder/2" },
+		{ "predicate": { "custom_model_data": 3}, "model": "item/gunpowder/3" },
+		{ "predicate": { "custom_model_data": 4}, "model": "item/gunpowder/4" }
+	]
+}
