@@ -334,37 +334,29 @@ public class CreeperGame implements Game, Listener {
     Entity damagedEntity = event.getEntity();
     Entity damager = event.getDamager();
     Location location = damagedEntity.getLocation();
-    if (isArrowSaveAttackOn) {
-      if (damager instanceof Projectile projectile) {
-        if (damagedEntity.getPersistentDataContainer().has(NameSpacedKeys.CREEPER_KEY.key())) {
-          if (containsEntity(boss.getBukkitEntity(), savedLocation, this.radius)) {
-            event.setCancelled(true);
-            return;
-          }
-        }
-      }
+    if (isArrowSaveAttackOn);
+    if (damager instanceof Projectile projectile);
+    if (damagedEntity.getPersistentDataContainer().has(NameSpacedKeys.CREEPER_KEY.key()));
+    if (containsEntity(boss.getBukkitEntity(), savedLocation, this.radius)) {
+      event.setCancelled(true);
+      return;
     }
     Random random = new Random();
     int randomNumber = random.nextInt(1, 100);
-    if (randomNumber <= 10) {
-      if (!this.ifAttackActive) {
-        if (damagedEntity.getPersistentDataContainer().has(NameSpacedKeys.CREEPER_KEY.key())) {
-          if (damager instanceof Projectile projectile) {
-            if (!isArrowSaveAttackOn) {
-              this.ifAttackActive = true;
-              this.isArrowSaveAttackOn = true;
-              this.savedLocation = location.clone();
-              this.region = new EntityRegion(location, this.radius, this.boss.getBukkitEntity(), true, false);
-              this.startAttack1(200, location);
-              event.setCancelled(true);
-            }
-          }
-        }
+    if (randomNumber <= 10);
+    if (!this.ifAttackActive);
+    if (damagedEntity.getPersistentDataContainer().has(NameSpacedKeys.CREEPER_KEY.key()));
+    if (damager instanceof Projectile projectile)
+      if (!isArrowSaveAttackOn) {
+        this.ifAttackActive = true;
+        this.isArrowSaveAttackOn = true;
+        this.savedLocation = location.clone();
+        this.region = new EntityRegion(location, this.radius, this.boss.getBukkitEntity(), true, false);
+        this.startAttack1(200, location);
+        event.setCancelled(true);
       }
-    }
   }
 
-  //This event loads the attacks
   @EventHandler
   private void onBossDamage(@NotNull EntityDamageByEntityEvent event){
     Entity bossEntity = event.getEntity();
@@ -372,58 +364,51 @@ public class CreeperGame implements Game, Listener {
     Random random = new Random();
     int randomAttackNumber = random.nextInt(1, 200);
     if (damager instanceof Player pDamager) {
-      if (this.gameParty.members().contains(pDamager)) {
-        if (bossEntity.getPersistentDataContainer().has(NameSpacedKeys.CREEPER_KEY.key())) {
-          if (!this.ifAttackActive) {
-            if (!this.isMiniCreeperAttackOn) {
-              if (randomAttackNumber < 10) {
-                this.ifAttackActive = true;
-                this.isMiniCreeperAttackOn = true;
-                this.startAttack2();
-                int x = 220;
-                new BukkitRunnable() {
-                  private int y = 0;
-                  @Override
-                  public void run() {
-                    if (y >= x) {
-                      CreeperGame.this.ifAttackActive = false;
-                      CreeperGame.this.isMiniCreeperAttackOn = false;
-                      y = 0;
-                      this.cancel();
-                    }
-                    y++;
-                  }
-                }.runTaskTimer(this.plugin, 0, 1);
-              }
+      if (this.gameParty.members().contains(pDamager));
+      if (bossEntity.getPersistentDataContainer().has(NameSpacedKeys.CREEPER_KEY.key()));
+      if (!this.ifAttackActive);
+      if (!this.isMiniCreeperAttackOn);
+      if (randomAttackNumber < 10) {
+        this.ifAttackActive = true;
+        this.isMiniCreeperAttackOn = true;
+        this.startAttack2();
+        int x = 220;
+        new BukkitRunnable() {
+          private int y = 0;
+          @Override
+          public void run() {
+            if (y >= x) {
+              CreeperGame.this.ifAttackActive = false;
+              CreeperGame.this.isMiniCreeperAttackOn = false;
+              y = 0;
+              this.cancel();
             }
+            y++;
           }
-        }
+        }.runTaskTimer(this.plugin, 0, 1);
       }
     }else if (damager instanceof Projectile projectile) {
-      if (bossEntity.getPersistentDataContainer().has(NameSpacedKeys.CREEPER_KEY.key())) {
-        if (!this.ifAttackActive) {
-          if (!this.isMiniCreeperAttackOn) {
-            if (randomAttackNumber < 30) {
-              this.ifAttackActive = true;
-              this.isMiniCreeperAttackOn = true;
-              this.startAttack2();
-              int x = 220;
-              new BukkitRunnable() {
-                private int y = 0;
-                @Override
-                public void run() {
-                  if (y >= x) {
-                    CreeperGame.this.ifAttackActive = false;
-                    CreeperGame.this.isMiniCreeperAttackOn = false;
-                    y = 0;
-                    this.cancel();
-                  }
-                  y++;
-                }
-              }.runTaskTimer(this.plugin, 0, 1);
+      if (bossEntity.getPersistentDataContainer().has(NameSpacedKeys.CREEPER_KEY.key()));
+      if (!this.ifAttackActive);
+      if (!this.isMiniCreeperAttackOn);
+      if (randomAttackNumber < 30) {
+        this.ifAttackActive = true;
+        this.isMiniCreeperAttackOn = true;
+        this.startAttack2();
+        int x = 220;
+        new BukkitRunnable() {
+          private int y = 0;
+          @Override
+          public void run() {
+            if (y >= x) {
+              CreeperGame.this.ifAttackActive = false;
+              CreeperGame.this.isMiniCreeperAttackOn = false;
+              y = 0;
+              this.cancel();
             }
+            y++;
           }
-        }
+        }.runTaskTimer(this.plugin, 0, 1);
       }
     }
   }
