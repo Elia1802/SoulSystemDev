@@ -16,18 +16,31 @@ import static de.elia.api.messages.builder.MessageBuilder.gray;
 import static de.elia.api.messages.builder.MessageBuilder.message;
 import static de.elia.systemclasses.messages.Message.broadcastWithPrefix;
 
-//This class give and remove the Player an Achievement.
+/**
+ * This class give and remove the Player an Achievement.
+ */
 @Beta("WARNING! DATA WILL NOW BE STORED IN THE DATABASE! Errors can still occur when saving to the database!")
 public class Achievement {
 
   private static final AchievementDB ACHIEVEMENT_DB = AchievementMain.achievementMain().getAchievementDataBase();
-  //Requires has the Player an Achievement
+
+  /**
+   * This methode checks if the {@link Player} has the {@link Achievement}
+   * @param player Needs the {@link Player} to check if the player has the {@link Achievement}
+   * @param achievement Needs the {@link Achievement} to check whether the {@link Player} has the achievement
+   * @return If the {@link Player} has the {@link Achievement}, it is true otherwise false
+   */
   public static boolean hasAchievement(@NotNull Player player, @NotNull Achievements achievement){
     return ACHIEVEMENT_DB.getAchievementOfPlayer(player, achievement);
   }
 
-  //Give the player an Achievement
+  /**
+   * This methode gives the {@link Player} an {@link Achievement}
+   * @param player Needs the {@link Player} to give him the {@link Achievement}
+   * @param achievement Needs the {@link Achievement} for the {@link Player}.
+   */
   public static void giveAchievement(@NotNull Player player, @NotNull Achievements achievement){
+    if (hasAchievement(player, achievement)){return;}
     //Save to the player an achievement in the database
     ACHIEVEMENT_DB.setPlayerAchievement(player, achievement);
     //Send a broadcast message
@@ -42,7 +55,11 @@ public class Achievement {
     AchievementMain.achievementMain().main().getServer().getPluginManager().callEvent(event);
   }
 
-  //Remove the Achievement of the player
+  /**
+   * This methode removes the {@link Achievement} of a {@link Player}
+   * @param player Needs the {@link Player} to remove his {@link Achievement}
+   * @param achievement Needs the {@link Achievement} to remove of the {@link Player}.
+   */
   public static void removeAchievement(@NotNull Player player, @NotNull Achievements achievement){
     //Delete the achievement in the database of the player
     ACHIEVEMENT_DB.delPlayerAchievement(player, achievement);

@@ -168,41 +168,35 @@ public class AchievementDataBase implements AchievementDB {
               connection.prepareStatement("SELECT uuid, achievement_id FROM " + AchievementDataBase.this.table + " WHERE uuid = ?");
             statement.setString(1, AchievementDataBase.this.convertUUID(player.getUniqueId()));
             ResultSet result = statement.executeQuery();
-            if (result.next()) {
-              if (result.getString("achievement_id").contains(achievement.dataID() + ", ")) {
-                String value = result.getString("achievement_id");
-                String oldValueToDelete = achievement.dataID() + ", ";
-                if (value.equals(oldValueToDelete)) {
-                  value.replaceAll(oldValueToDelete, "");
-                  VIRTUAL_DATA_SAVER.put(AchievementDataBase.this.convertUUID(player.getUniqueId()), "");
-                }
-                Pattern pattern = Pattern.compile("\\b" + Pattern.quote(oldValueToDelete) + "\\b");
-                Matcher matcher = pattern.matcher(value);
-                if (matcher.find()) {
-                  String restValue = value.substring(0, matcher.start()) + value.substring(matcher.end());
-                  VIRTUAL_DATA_SAVER.put(AchievementDataBase.this.convertUUID(player.getUniqueId()), restValue);
-                }
-              }else if (result.getString("achievement_id").contains(achievement.dataID())) {
-                String value = result.getString("achievement_id");
-                String oldValueToDelete  = achievement.dataID();
-                if (value.equals(oldValueToDelete)) {
-                  value.replaceAll(oldValueToDelete, "");
-                  VIRTUAL_DATA_SAVER.put(AchievementDataBase.this.convertUUID(player.getUniqueId()), "");
-                }
-                Pattern pattern = Pattern.compile("\\b" + Pattern.quote(oldValueToDelete) + "\\b");
-                Matcher matcher = pattern.matcher(value);
-                if (matcher.find()) {
-                  String restValue = value.substring(0, matcher.start()) + value.substring(matcher.end());
-                  VIRTUAL_DATA_SAVER.put(AchievementDataBase.this.convertUUID(player.getUniqueId()), restValue);
-                }
-              }else {
-                logger.logError("The data id of the achievement is not found! No data found! Please contact Elia!");
-                return;
+            if (result.next());
+            if (result.getString("achievement_id").contains(achievement.dataID() + ", ")) {
+              String value = result.getString("achievement_id");
+              String oldValueToDelete = achievement.dataID() + ", ";
+              if (value.equals(oldValueToDelete)) {
+                value.replaceAll(oldValueToDelete, "");
+                VIRTUAL_DATA_SAVER.put(AchievementDataBase.this.convertUUID(player.getUniqueId()), "");
               }
-            }else {
-              logger.logWarning("The player has no entries!");
-              return;
+              Pattern pattern = Pattern.compile("\\b" + Pattern.quote(oldValueToDelete) + "\\b");
+              Matcher matcher = pattern.matcher(value);
+              if (matcher.find()) {
+                String restValue = value.substring(0, matcher.start()) + value.substring(matcher.end());
+                VIRTUAL_DATA_SAVER.put(AchievementDataBase.this.convertUUID(player.getUniqueId()), restValue);
+              }
             }
+            if (result.getString("achievement_id").contains(achievement.dataID())) {
+              String value = result.getString("achievement_id");
+              String oldValueToDelete  = achievement.dataID();
+              if (value.equals(oldValueToDelete)) {
+                value.replaceAll(oldValueToDelete, "");
+                VIRTUAL_DATA_SAVER.put(AchievementDataBase.this.convertUUID(player.getUniqueId()), "");
+              }
+              Pattern pattern = Pattern.compile("\\b" + Pattern.quote(oldValueToDelete) + "\\b");
+              Matcher matcher = pattern.matcher(value);
+              if (matcher.find()) {
+                String restValue = value.substring(0, matcher.start()) + value.substring(matcher.end());
+                VIRTUAL_DATA_SAVER.put(AchievementDataBase.this.convertUUID(player.getUniqueId()), restValue);
+              }
+            }else return;
           }catch (SQLException exception) {
             exception.printStackTrace();
             SaveError.saveError(Main.main(), exception, "AchievementDataBase-DeleteUtils-requestData-An_error_occurred_by_deleting_the_achievement_id=SQLException");

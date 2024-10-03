@@ -21,28 +21,23 @@ import static de.elia.api.messages.builder.MessageBuilder.message;
 import static de.elia.api.messages.builder.MessageBuilder.red;
 import static de.elia.systemclasses.messages.Message.messageWithPrefix;
 
-//A Command to give a Player an Achievement
+/**
+ * The Command to give a Player an Achievement
+ */
 public class AchievementGiveCommand extends Command {
 
   //Set the command, description, usage message and aliases
-  private static final Map<String, String> ARGUMENTS = new HashMap<>();
   public AchievementGiveCommand() {
-    this("achievementgive", "The achievementgive command give the player a Achievement.", "Use /achievementhelp [PLAYER] [ACHIEVEMENT]", Arrays.asList("achievementg", "agive"));
+    super("achievementgive", "The achievementgive command give the player a Achievement.", "Use /achievementhelp [PLAYER] [ACHIEVEMENT]", Arrays.asList("achievementg", "agive"));
   }
 
-  public AchievementGiveCommand(@NotNull String name, @NotNull String description, @NotNull String usageMessage, @NotNull List<String> aliases) {
-    super(name, description, usageMessage, aliases);
-  }
-
-  static {
-    ARGUMENTS.put("bossfight", Achievements.BOSSFIGHT.getName());
-    ARGUMENTS.put("bossfight_zombie", Achievements.BOSSFIGHT_ZOMBIE.getName());
-    ARGUMENTS.put("bossfight_zombie_end", Achievements.BOSSFIGHT_ZOMBIE_END.getName());
-    ARGUMENTS.put("bossfight_creeper", Achievements.BOSSFIGHT_CREEPER.getName());
-    ARGUMENTS.put("bossfight_creeper_end", Achievements.BOSSFIGHT_CREEPER_END.getName());
-    ARGUMENTS.put("bossfight_creeper_mini", Achievements.BOSSFIGHT_CREEPER_MINI.getName());
-  }
-
+   /**
+   * The server executes this method when this command is entered
+   * @param sender The {@link CommandSender} is the one that executed the command
+   * @param subCommand The command name (in this code achievementgive)
+   * @param args The arguments of this command
+   * @return Returns true if everything worked, otherwise false
+   */
   @Override
   public boolean execute(@NotNull CommandSender sender, @NotNull String subCommand, String[] args) {
     //check if the executer a player
@@ -53,14 +48,12 @@ public class AchievementGiveCommand extends Command {
         if (args.length == 2) {
           //get the target of the first argument
           Player target = Bukkit.getPlayer(args[0]);
-          //check if the target online
+          //check if the target online or exist
           if (target.getName() == null) {
             message(player, gold("Dieser Spieler existiert nicht oder ist nicht online!"));
             return false;
           }
           //check witch achievement is selected in the second argument
-          String argument = args[1];
-          String predefinedArgument = ARGUMENTS.get(argument);
           if (args[1].equalsIgnoreCase("bossfight")) {
             //Try to give the player the achievement Bossfight if an error occurred, save this error and print this in the console
             this.achievement(target, Achievements.BOSSFIGHT);
@@ -129,6 +122,13 @@ public class AchievementGiveCommand extends Command {
     giveAchievement(target, achievement);
   }
 
+  /**
+   * While the CommandSender enters the command, the server gives suggestions for achievements and players
+   * @param sender The {@link CommandSender} is the one that executed the command
+   * @param subCommand The command name (in this code achievementgive)
+   * @param args The arguments of this command
+   * @return Returns true if everything worked, otherwise false
+   */
   @Override
   @NotNull
   public List<String> tabComplete(@NotNull CommandSender sender, @NotNull String subCommand, String[] args) {

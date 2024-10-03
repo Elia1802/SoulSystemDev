@@ -16,17 +16,25 @@ import static de.elia.api.messages.builder.MessageBuilder.gray;
 import static de.elia.api.messages.builder.MessageBuilder.red;
 import static de.elia.systemclasses.messages.Message.messageWithPrefix;
 
-//Give the Player a help about the Achievement Plugin
+/**
+ * Give the Player a help about the Achievement Plugin
+ */
 public class AchievementHelpCommand extends Command {
 
+  /**
+   * Set the command, description, usage message and aliases
+   */
   public AchievementHelpCommand() {
-    this("achievementhelp", "The achievementhelp command send the player a help about the achievement plugin in this plugin", "/achievementhelp [HELP]", Arrays.asList("achievementh", "ahelp"));
+    super("achievementhelp", "The achievementhelp command send the player a help about the achievement plugin in this plugin", "/achievementhelp [HELP]", Arrays.asList("achievementh", "ahelp"));
   }
 
-  public AchievementHelpCommand(@NotNull String name, @NotNull String description, @NotNull String usageMessage, @NotNull List<String> aliases) {
-    super(name, description, usageMessage, aliases);
-  }
-
+  /**
+   * This command will be giving a {@link Player} help about the achievement plugin
+   * @param sender The {@link CommandSender} is the one that executed the command
+   * @param commandLabel The command name (in this code achievementgive)
+   * @param args The arguments of this command
+   * @return Returns true if everything worked, otherwise false
+   */
   @Override
   public boolean execute(@NotNull CommandSender sender, @NotNull String commandLabel, @NotNull String[] args) {
     PluginLogger logger = AchievementMain.achievementMain().achievementPluginLogger();
@@ -55,9 +63,16 @@ public class AchievementHelpCommand extends Command {
     return false;
   }
 
+  /**
+   * While the CommandSender enters the command, the server gives suggestions for help ideas
+   * @param sender The {@link CommandSender} is the one that executed the command
+   * @param alias The command name
+   * @param args The arguments of this command
+   * @return Returns true if everything worked, otherwise false
+   */
   @Override
   @NotNull
-  public List<String> tabComplete(@NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args) throws IllegalArgumentException {
+  public List<String> tabComplete(@NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args) {
     ArrayList<String> tab = new ArrayList<>();
     if (args.length == 1) {
       tab.add("givecommand");
