@@ -27,10 +27,20 @@ import java.io.IOException;
 
 //Coding by Sinan and Elia
 //Load and paste the schematics in the Bossfightworld
+
+/**
+ * @author Sinan, Elia
+ * Load and paste the schematics in the Bossfightworld
+ */
 public class SchematicBuilder {
 
-  //Coding by Sinan
-  //Gets the Schematic
+  /**
+   * Gets the schematic file from the given path
+   * @author Sinan, Elia
+   * @param path Requires the path of the schematic file
+   * @param schematicName Requires the name of the schematic file
+   * @return The schematic file (if it exists)
+   */
   @NotNull
   public Clipboard schematic(@NotNull File path, @NotNull String schematicName) {
     Clipboard clipboard;
@@ -40,6 +50,7 @@ public class SchematicBuilder {
       return clipboard = reader.read();
     }catch (IOException exception) {
       //Start Elia's code
+      //Save the error in a .txt file
       SaveError.saveError(BossFightCreatorMain.bossFightCreator().main(), exception, "SchematicBuilder-schematic-An_error_occurred_by_reading_a_schematic_file=IOException");
       exception.printStackTrace();
       return null;
@@ -47,7 +58,13 @@ public class SchematicBuilder {
     }
   }
 
-  //Coding by Sinan
+  /**
+   * Load the schemetic in the world
+   * @author Sinan, Elia
+   * @param location Needs the location where the schematic should be loaded
+   * @param clipboard Needs the clipboard where the schematic is loaded
+   * @throws WorldEditException
+   */
   public void pasteSchematic(@NotNull Location location, @NotNull Clipboard clipboard) throws WorldEditException {
     EditSession session = WorldEdit.getInstance().newEditSession(new BukkitWorld(location.getWorld()));
     Operation operation =
@@ -59,5 +76,7 @@ public class SchematicBuilder {
         .build();
     Operations.complete(operation);
     session.close();
+    //Remove the clipboard (coded of Elia)
+    clipboard.close();
   }
 }

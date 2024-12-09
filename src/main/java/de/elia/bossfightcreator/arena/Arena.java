@@ -15,17 +15,30 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
-//This class is an Arena and has all important values for the arena.
+/**
+ * This class is an Arena and has all important values for the arena.
+ */
 public class Arena {
 
+  //Location of the arena
   private final Location location;
+  //Name of the arena
   private final String name;
+  //ID of the arena
   private final @NotNull String arenaID;
+  //Mob type of the arena
   private final ArenaMobType mobType;
+  //State of the arena
   private ArenaState state = ArenaState.UNINITIALIZED;
-  private Game zombieGame;
+  private Game game;
 
-  //Build the Arena
+  /**
+   * Build the Arena
+   * @param name Requires a name of the arena
+   * @param location Requires a location of the arena
+   * @param arenaID Requires an ID of the arena
+   * @param mobType Requires a mob type of the arena
+   */
   public Arena(@NotNull String name, @NotNull Location location, @NotNull String arenaID, ArenaMobType mobType) {
     this.name = name;
     this.location = location;
@@ -74,7 +87,7 @@ public class Arena {
   //Gets the Game of the Arena
   @NotNull
   public Game getGame() {
-    return this.zombieGame;
+    return this.game;
   }
 
   //Gets the state of the Arena
@@ -90,8 +103,8 @@ public class Arena {
   }
 
   //Set a Game to this arena
-  public void setGame(@NotNull final Game zombieGame) {
-    this.zombieGame = zombieGame;
+  public void setGame(@NotNull final Game game) {
+    this.game = game;
   }
 
   //Set a new state for this arena
