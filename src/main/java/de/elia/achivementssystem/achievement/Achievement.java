@@ -52,6 +52,7 @@ public class Achievement {
     player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.0f);
     //Run the achievement event
     AchievementGiveEvent event = new AchievementGiveEvent(player, achievement);
+    //Call the achievement event
     AchievementMain.achievementMain().main().getServer().getPluginManager().callEvent(event);
   }
 

@@ -26,7 +26,9 @@ import static de.elia.systemclasses.messages.Message.messageWithPrefix;
  */
 public class AchievementGiveCommand extends Command {
 
-  //Set the command, description, usage message and aliases
+  /**
+   * Set the command, description, usage message and aliases
+   */
   public AchievementGiveCommand() {
     super("achievementgive", "The achievementgive command give the player a Achievement.", "Use /achievementhelp [PLAYER] [ACHIEVEMENT]", Arrays.asList("achievementg", "agive"));
   }

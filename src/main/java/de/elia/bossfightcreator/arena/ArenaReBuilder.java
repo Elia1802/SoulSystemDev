@@ -10,10 +10,15 @@ import com.sk89q.worldedit.WorldEditException;
 
 import org.jetbrains.annotations.NotNull;
 
-//This class rebuilds an arena
+/**
+ * This class rebuilds an arena
+ */
 public class ArenaReBuilder {
 
-  //Rebuild a Arena.
+  /**
+   * Rebuild a Arena.
+   * @param arena the arena to reload
+   */
   public static void reBuildArena(@NotNull Arena arena) {
     BossFightCreatorMain.bossFightCreator().bossFightCreatorLogger().logInfo(arena.getName() + " is being build at " + arena.getLocation() + "!");
     try {

@@ -19,31 +19,48 @@ import static de.elia.api.messages.builder.MessageBuilder.gray;
 import static de.elia.api.messages.builder.MessageBuilder.red;
 import static de.elia.systemclasses.messages.Message.messageWithPrefix;
 
-//This command sends a help about the Bossfightcreator plugin
+/**
+ * This command sends a help about the Bossfightcreator plugin
+ */
 public class BossFightCreatorHelpCommand extends Command {
 
+  /**
+   * Set the settings of this command
+   */
   public BossFightCreatorHelpCommand() {
-    this("bossfightcreatorhelp", "The bossfightcreatorhelp command send the player a help about the bossfightcreator plugin in this Plugin", "Use /bossfightcreatorhelp [HELP]", Arrays.asList("bossfightcreatorh", "bfchelp"));
+    super("bossfightcreatorhelp", "The bossfightcreatorhelp command send the player a help about the bossfightcreator plugin in this Plugin", "Use /bossfightcreatorhelp [HELP]", Arrays.asList("bossfightcreatorh", "bfchelp"));
   }
 
-  public BossFightCreatorHelpCommand(@NotNull String name, @NotNull String description, @NotNull String usageMessage, @NotNull List<String> aliases) {
-    super(name, description, usageMessage, aliases);
-  }
-
+  /**
+   * The server executes this method when this command is entered
+   * @param sender The {@link CommandSender} is the one that executed the command
+   * @param commandLabel The command name (in this code achievementgive)
+   * @param args The arguments of this command
+   * @return Returns true if everything worked, otherwise false
+   */
   @Override
   public boolean execute(@NotNull CommandSender sender, @NotNull String commandLabel, @NotNull String[] args) {
+    //Get logger instnace
     PluginLogger logger = BossFightCreatorMain.bossFightCreator().bossFightCreatorLogger();
+    //Checks if the sender is an player
     if (sender instanceof Player player) {
+      //Checks if the command length correct
       if (args.length == 1) {
+        //checks if the argument "tpworldcommand"
         if (args[0].equalsIgnoreCase("tpworldcommand")) {
+          //Send a help message
           messageWithPrefix(player, gray("This Command ").append(aqua("/bossfightcreatorworld [PLAYER] [WORLD]")).append(gray("teleports a player to the world from SoulBossSystem and back.")));
           return true;
         }
+        //checks if the argument "helpcommand"
         if (args[0].equalsIgnoreCase("helpcommand")) {
+          //Send a help message
           messageWithPrefix(player, gray("This Command ").append(aqua("/bossfightcreatorhelp [COMMAND]")).append(gray("will give you help and information about this command.")));
           return true;
         }
+        //checks if the argument "allcommands"
         if (args[0].equalsIgnoreCase("allcommands")) {
+          //Send a help message
           messageWithPrefix(player, gray("This Command ").append(aqua("/bossfightcreatorworld [PLAYER] [WORLD]")).append(gray("teleports a player to the world from SoulBossSystem and back.")));
           messageWithPrefix(player, gray("This Command ").append(aqua("/bossfightcreatorhelp [COMMAND]")).append(gray("will give you help and information about this command.")));
           return true;
@@ -58,9 +75,16 @@ public class BossFightCreatorHelpCommand extends Command {
     return false;
   }
 
+  /**
+   * Create the tab function
+   * @param sender Source object which is executing this command
+   * @param alias the alias being used
+   * @param args All arguments passed to the command, split via ' '
+   * @return A list with the arguments
+   */
   @Override
   @NotNull
-  public List<String> tabComplete(@NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args) throws IllegalArgumentException {
+  public List<String> tabComplete(@NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args) {
     ArrayList<String> tab = new ArrayList<>();
     if (args.length == 1) {
       tab.add("tpworldcommand");

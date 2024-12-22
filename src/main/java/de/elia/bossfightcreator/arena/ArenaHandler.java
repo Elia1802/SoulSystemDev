@@ -21,7 +21,9 @@ import java.util.Set;
 
 import static de.elia.api.messages.builder.MessageBuilder.*;
 
-//This class handled and loaded all arenas.
+/**
+ * This class handled and loaded all arenas.
+ */
 public class ArenaHandler {
 
   public static final File FILE_PATH = new File(Main.main().getDataFolder() + "/arenas/");//Path of the schematics
@@ -31,12 +33,23 @@ public class ArenaHandler {
   private static final HashMap<String, Set<Arena>> arenas = new HashMap<>();
   public static int ARENA_OFFSET = 0;
 
-  //Gets a free arena.
+  /**
+   * Gets a free arena.
+   * @param type Requires the mob type
+   * @param gameOwner Requires the future game owner
+   * @return a free arena with the matching requirements
+   */
   public static @NotNull Optional<Arena> getFreeArena(@NotNull ArenaMobType type, Player gameOwner) {
     return ArenaHandler.getArenaWithType(ArenaState.FREE, type, gameOwner);
   }
 
-  //Gets an arena with a specified state of a list.
+  /**
+   * Gets an arena with a specified state of a list.
+   * @param arenaState Requires the state of the arena
+   * @param type Requires the mob type
+   * @param gameOwner Requires the future game owner
+   * @return an arena with the matching requirements
+   */
   @NotNull
   public static Optional<Arena> getArenaWithType(@NotNull ArenaState arenaState, @NotNull ArenaMobType type, Player gameOwner) {
     try {
@@ -51,7 +64,12 @@ public class ArenaHandler {
     }
   }
 
-  //Gets all Arenas with a specify ArenaState of a list.
+  /**
+   * Gets all Arenas with a specify ArenaState of a list.
+   * @param arenaState Requires the state of the arena
+   * @param type Requires the mob type
+   * @return arenas with the matching requirements
+   */
   @NotNull
   public static ArrayList<Arena> getArenasWithType(@NotNull ArenaState arenaState, @NotNull ArenaMobType type) {
     ArrayList<Arena> collectedArenas = new ArrayList<>();
@@ -59,7 +77,10 @@ public class ArenaHandler {
     return collectedArenas;
   }
 
-  //Initialized the arenas by server start.
+  /**
+   * Initialized the arenas by server start.
+   * @param main Requries the plugin instance of the {@link Main}
+   */
   public static void init(@NotNull JavaPlugin main) {
     if (!FILE_PATH.exists()) {
       FILE_PATH.mkdir();
@@ -68,8 +89,14 @@ public class ArenaHandler {
     ArenaHandler.generateArenas("arena_2",Bukkit.getWorld("world_bossfight"), ARENAS_Z_DISTANCE, ArenaMobType.CREEPER);
   }
 
-  //Generate the arenas.
-  public static void generateArenas(String schem, @NotNull World world, int z, ArenaMobType mobType) {
+  /**
+   * Generate the arenas.
+   * @param schem need the schematic for the arenas
+   * @param world the world for the arena/schematic
+   * @param z the distance to the last arena on the z cordinate
+   * @param mobType The mob type for the arena
+   */
+  private static void generateArenas(String schem, @NotNull World world, int z, ArenaMobType mobType) {
     HashSet<Arena> setArena = new HashSet<>();
     for (int i = 0; i < AREANS_TO_GENERATE; ++i) {
       setArena.add(ArenaHandler.generateArena(schem, world, z, schem + "." + i, mobType));
@@ -80,7 +107,15 @@ public class ArenaHandler {
     ARENA_OFFSET = 0;
   }
 
-   //Generate a arena
+  /**
+   * Generate a arena
+   * @param schem need the schematic for the arenas
+   * @param world the world for the arena/schematic
+   * @param z the distance to the last arena on the z cordinate
+   * @param arenaID A custom id for this arena
+   * @param mobType The mob type for the arena
+   * @return the loaded arena
+   */
   @NotNull
   private static Arena generateArena(@NotNull String schem, @NotNull World world, int z, String arenaID, ArenaMobType mobType) {
     return new Arena(schem, new Location(world, (ARENAS_X_DISTANCE * ARENA_OFFSET), 100.0, z), arenaID, mobType);

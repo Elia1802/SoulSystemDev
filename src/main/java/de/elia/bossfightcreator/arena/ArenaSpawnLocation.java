@@ -20,7 +20,9 @@ import static de.elia.api.messages.builder.MessageBuilder.message;
 import static de.elia.api.messages.builder.MessageBuilder.red;
 import static de.elia.api.messages.builder.MessageBuilder.yellow;
 
-//This class gets the spawn location for the arenas
+/**
+ * This class gets the spawn location for the arenas
+ */
 public class ArenaSpawnLocation {
 
   private static final ArrayList<String> ARENA_IDs = new ArrayList<>();
@@ -48,6 +50,12 @@ public class ArenaSpawnLocation {
     ARENA_IDs.add("arena_2.9");
   }
 
+  /**
+   * Set a spawn location for the arena
+   * @param arenaID Requires the id of the arena
+   * @param player A game owner for error messages
+   * @return the location for the arena
+   */
   @Nullable
   public static Location spawnLocation(@NotNull String arenaID, Player player){
     if (ARENA_IDs.contains(arenaID)) {

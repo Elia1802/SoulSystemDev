@@ -44,8 +44,11 @@ public class SchematicBuilder {
   @NotNull
   public Clipboard schematic(@NotNull File path, @NotNull String schematicName) {
     Clipboard clipboard;
+    //Get the file on the plugin folder
     File arenaFile = new File(path, schematicName + ".schem");
+    //search the format of the build in the file
     ClipboardFormat format = ClipboardFormats.findByFile(arenaFile);
+    //read the format in the clipboard
     try (ClipboardReader reader = format.getReader(new FileInputStream(arenaFile))) {
       return clipboard = reader.read();
     }catch (IOException exception) {

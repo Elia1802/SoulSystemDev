@@ -47,12 +47,16 @@ public class Arena {
     this.buildArena();
   }
 
-  //Build a new Arena
+  /**
+   * Build a new Arena
+   */
   private void buildArena() {
     Instances.BOSS_FIGHT_CREATOR_LOGGER.logInfo(this.name + " is being build at " + this.location + "!");
     try {
+      //Set state to loading
       this.state = ArenaState.LOADING;
       Instances.BOSS_FIGHT_CREATOR_LOGGER.logInfo("Paste the schematic of the arena");
+      //Ne
       new SchematicBuilder().pasteSchematic(this.location, new SchematicBuilder().schematic(ArenaHandler.FILE_PATH, this.name));
       File arenaFile = new File(ArenaHandler.FILE_PATH, this.name + ".schem");
       Instances.BOSS_FIGHT_CREATOR_LOGGER.logInfo(arenaFile + "  !  " + arenaFile.exists());
@@ -66,48 +70,72 @@ public class Arena {
     Instances.BOSS_FIGHT_CREATOR_LOGGER.logInfo(this.name + " was build at " + this.location + "! And now the State is " + this.state);
   }
 
-  //Gets the location of the arena
+  /**
+   * Gets the location of the arena
+   * @return a {@link Location} of the arena
+   */
   @NotNull
   public Location getLocation() {
     return this.location;
   }
 
-  //Gets the Name of the arena
+  /**
+   * Gets the Name of the arena
+   * @return a name as {@link String}
+   */
   @NotNull
   public String getName() {
     return this.name;
   }
 
-  //Gets the ID of the Arena
+  /**
+   * Gets the Name of the arena
+   * @return an ID as {@link String}
+   */
   @NotNull
   public String getArenaID() {
     return this.arenaID;
   }
 
-  //Gets the Game of the Arena
+  /**
+   * Gets the Game of the Arena
+   * @return the {@link Game} of this arena
+   */
   @NotNull
   public Game getGame() {
     return this.game;
   }
 
-  //Gets the state of the Arena
+  /**
+   * Gets the state of the Arena
+   * @return a {@link ArenaState}
+   */
   @NotNull
   public ArenaState getState() {
     return this.state;
   }
 
-  //Gets the mob type of the Arena
+  /**
+   * Gets the mob type of the Arena
+   * @return the mob type
+   */
   @NotNull
   public ArenaMobType getMobType() {
-    return mobType;
+    return this.mobType;
   }
 
-  //Set a Game to this arena
+  /**
+   * Set a Game to this arena
+   * @param game a specified {@link Game} for the arena
+   */
   public void setGame(@NotNull final Game game) {
     this.game = game;
   }
 
-  //Set a new state for this arena
+  /**
+   * Set a new state for this arena
+   * @param state the new {@link ArenaState} for the arena
+   */
   public void setState(@NotNull ArenaState state) {
     this.state = state;
   }
