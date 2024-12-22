@@ -74,7 +74,12 @@ public class ZombieGame implements Listener, Game {
         ZombieGame.this.boss = new ZombieBoss(ZombieGame.this.spawnLocation, ZombieGame.this.bossName){
           @Override
           public void die(@NotNull DamageSource damageSource) {
-            Bukkit.getWorld("world_bossfight").strikeLightningEffect(this.getBukkitCreature().getLocation());
+            Bukkit.getWorld("world_bossfight").strikeLightningEffect(ZombieGame.this.boss.getBukkitEntity().getLocation());//TEST (Info next line)
+            /*
+            OLD: Bukkit.getWorld("world_bossfight").strikeLightningEffect(this.getBukkitCreature().getLocation());
+            NEW: Bukkit.getWorld("world_bossfight").strikeLightningEffect(ZombieGame.this.boss.getBukkitEntity().getLocation());
+            Change because in the old call, the method getBukkitCreator no longer exists
+             */
             BossFightCreatorMain.bossFightCreator().bossFightCreatorLogger().logInfo("The Boss " + this + this.getName() + "is death!");
             ZombieGame.this.party.members().forEach(player -> giveAchievement(player, Achievements.BOSSFIGHT_ZOMBIE_END));
             super.die(damageSource);

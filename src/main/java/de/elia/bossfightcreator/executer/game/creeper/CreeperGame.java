@@ -75,28 +75,59 @@ import static de.elia.bossfightcreator.BossFightCreatorMain.playerStatusMap;
 //This class processed the Creeper Bossfights
 public class CreeperGame implements Game, Listener {
 
-  private static final EntityDataAccessor<Boolean> DATA_IS_IGNITED = SynchedEntityData.defineId(CreeperBoss.class, EntityDataSerializers.BOOLEAN);
-  private final Map<Player, Location> lastPlayerLocations = new HashMap<>();
+  //Instances:
+  //An instance of the plugin logger
   private final PluginLogger logger = BossFightCreatorMain.bossFightCreator().bossFightCreatorLogger();
+  //An instance of the spawn location in the world "world"
   private final Location mainSpawnLocation = Bukkit.getWorld("world").getSpawnLocation();
-  private final int explosionRadius = 2;
-  private final Arena arena;
-  private final Player gameOwner;
+  //An instance of the main class
   private final JavaPlugin plugin;
+
+  //Variables:
+  //The arena of this game
+  private final Arena arena;
+  //The game owner for this game
+  private final Player gameOwner;
+  //The spawnlocation for the creeper boss
   private final Location spawnLocation;
+  //The party for this game
   private final Party gameParty;
+  //The bossbar for the boss of this game
   private final GameBossBar bossBar;
+  //The name of the boss
   private final String bossName;
-  private final double radius = 5;
+  //The boss entity
   private CreeperBoss boss;
+  //The uuid of the boos
   private UUID bossUUID;
+  //A region of the boss
   private EntityRegion region;
+  //This variable saved the explosion-death location to respawn the boss on the same location
   private Location savedLocation;
-  private boolean isArrowSaveAttackOn = false;
-  private boolean isMiniCreeperAttackOn = false;
+  //A boolean to check if the boss used an attack
   private boolean ifAttackActive;
 
-  //This creates a new Creeper game
+  //Settings
+  //the explosion radius of the creeper boss
+  private final int explosionRadius = 2;
+  //The radius of the entity region
+  private final double radius = 5;
+  //Booleans to check if the specified attack used
+  private boolean isArrowSaveAttackOn = false;
+  private boolean isMiniCreeperAttackOn = false;
+
+  //OTHERS
+  //PAPER
+  private static final EntityDataAccessor<Boolean> DATA_IS_IGNITED = SynchedEntityData.defineId(CreeperBoss.class, EntityDataSerializers.BOOLEAN);
+
+  /**
+   * This creates a new Creeper game
+   * @param arena The arena for this game
+   * @param gameOwner The game owner for this game
+   * @param plugin The main instance
+   * @param spawnLocation The spawn location for all entities
+   * @param gameParty The party for this game
+   */
   public CreeperGame(@NotNull Arena arena, @NotNull Player gameOwner, @NotNull JavaPlugin plugin, @NotNull Location spawnLocation, @NotNull Party gameParty){
     this.arena = arena;
     this.gameOwner = gameOwner;
@@ -104,81 +135,118 @@ public class CreeperGame implements Game, Listener {
     this.spawnLocation = spawnLocation;
     this.gameParty = gameParty;
     this.bossBar = new GameBossBar();
+    //Register this class as event listener
     plugin.getServer().getPluginManager().registerEvents(this, plugin);
     this.logger.logInfo("Start the Countdown for the start");
+    //Add this game to the active game list
     ALL_ACTIVE_GAMES.add(this);
+    //Set the boss name
     bossName = "TEST";
+    //Start the start timer for this game
     new StartGameTimer().start(120*20, gameOwner, spawnLocation, plugin);
   }
 
-  //This methode starts the game
+  /**
+   * This methode starts the game
+   */
   protected void startGame() {
+    //Create a runnable because this code can't be executing asynchron
     new BukkitRunnable() {
       @Override
       public void run() {
         CreeperGame.this.logger.logInfo("Spawn Boss...");
+        //Spawn the boss and override the methode die and explodeCreeper
         CreeperGame.this.boss = new CreeperBoss(CreeperGame.this.spawnLocation, CreeperGame.this.bossName, null, null) {
+          //Override die methode
           @Override
           public void die(@NotNull DamageSource damageSource) {
             CreeperGame.this.die(damageSource, CreeperGame.this.boss);
           }
+          //Override explodeCreeper methode
           @Override
           public void explodeCreeper() {
             CreeperGame.this.explodeCreeper(CreeperGame.this.boss);
           }
         };
+        //Set uuid
         bossUUID = CreeperGame.this.boss.getUUID();
+        //Creaté bossbar
         CreeperGame.this.bossBar.create(CreeperGame.this.boss);
       }
+    //Execute the runnable
     }.runTask(this.plugin);
   }
 
-  //This methode ends the game
+  /**
+   * This methode ends the game
+   */
   protected void endGame(){
+    //Create a runnable because this code can't be executing asynchron
     new BukkitRunnable(){
       @Override
       public void run() {
         CreeperGame.this.logger.logInfo("Remove the game properties of all players and teleport this players back to World world...");
+        //Get every player in the party.
         CreeperGame.this.gameParty.members().forEach(player -> {
+          //Teleport the player back to the main spawn location of the server
           player.teleport(mainSpawnLocation);
+          //Reset the state of the player
           playerStatusMap().replace(player, 0);
         });
         CreeperGame.this.logger.logInfo("Properties removed!");
         CreeperGame.this.logger.logInfo("Remove party...");
+        //Delete the party of this game
         CreeperGame.this.gameParty.removeParty(CreeperGame.this.gameOwner);
         CreeperGame.this.logger.logInfo("Party removed!");
         CreeperGame.this.logger.logInfo("Rebuild the arena...");
+        //Rebuild the arena of this game
         ArenaReBuilder.reBuildArena(CreeperGame.this.arena);
         CreeperGame.this.logger.logInfo("Arena rebuild!");
+        //Delete the game of the active game list
         ALL_ACTIVE_GAMES.remove(CreeperGame.this);
         message(CreeperGame.this.gameOwner, gray("Game end!"));
       }
     }.runTask(this.plugin);
   }
 
-  //This methode kills this game
+  /**
+   * This methode kills this game
+   * @param reason Required the reason
+   * @param isRestart If not a restart, unload the game "normal"
+   */
   @Override
   public void kill(String reason, boolean isRestart){
     killGame(reason, isRestart);
   }
 
-  //This methode kills this game
+  /**
+   * This methode kills this game
+   * @param reason Required the reason
+   * @param isRestart If not a restart, unload the game "normal"
+   */
   protected void killGame(String reason, boolean isRestart){
     if (!isRestart) {
+      //Create a runnable because this code can't be executing asynchron
       new BukkitRunnable(){
         @Override
         public void run() {
           CreeperGame.this.logger.logInfo("Remove the game properties of all players and teleport this players back to World world...");
+          //Get every player in the party.
           CreeperGame.this.gameParty.members().forEach(player -> {
+            //Teleport the player back to the main spawn location of the server
             player.teleport(mainSpawnLocation);
+            //Reset the state of the player
             playerStatusMap().replace(player, 0);
             message(player, red("DAS GAME WURDE BEENDET WEIL: " + reason + "!"));
+            //Remove the bossbar
             CreeperGame.this.bossBar.remove(CreeperGame.this.boss);
           });
           CreeperGame.this.logger.logInfo("Properties removed!");
           CreeperGame.this.logger.logInfo("Remove party...");
+          //Delete the party of this game
           CreeperGame.this.gameParty.removeParty(CreeperGame.this.gameOwner);
           CreeperGame.this.logger.logInfo("Party removed!");
+          //Delete the game of the active game list
           ALL_ACTIVE_GAMES.remove(CreeperGame.this);
           message(CreeperGame.this.gameOwner, gray("Game end!"));
         }
@@ -186,31 +254,48 @@ public class CreeperGame implements Game, Listener {
     }
   }
 
-  //This methode executes the tasks if the creeper dies
+  /**
+   * This methode executes the tasks if the creeper dies
+   * @param damageSource The source of damamge because the boss dies
+   * @param entity Requires the boss
+   */
   public void die(@NotNull DamageSource damageSource, Creeper entity) {
     if (CreeperGame.this.region == null){
+      //Generate a strike lightning effect on the death location of the boss
       entity.getBukkitEntity().getWorld().strikeLightningEffect(entity.getBukkitEntity().getLocation());
+      //Give all players the achievement for killing the boss
       CreeperGame.this.gameParty.members().forEach(player -> giveAchievement(player, Achievements.BOSSFIGHT_CREEPER_END));
+      //Generate drops for the players
+      //TODO: FOR ALL PLAYERS IN THE PARTY DROPS
       new Drops(this.gameOwner, entity.getBukkitEntity(), entity.getBukkitEntity().getLocation());
+      //Remove the bossbar
       CreeperGame.this.bossBar.remove(CreeperGame.this.boss);
       CreeperGame.this.logger.logInfo("The Boss is die!");
       CreeperGame.this.logger.logInfo("End Game!");
       CreeperGame.this.logger.logInfo("Start game end timer!");
+      //Start for every player in the party the end timer
       CreeperGame.this.gameParty.members().forEach(player -> new EndGameTimer().start(60*20, player, CreeperGame.this.mainSpawnLocation, CreeperGame.this.plugin));
     }else {
+      //Generate a strike lightning effect on the death location of the boss
       entity.getBukkitEntity().getWorld().strikeLightningEffect(entity.getBukkitEntity().getLocation());
+      //Give all players the achievement for killing the boss
       CreeperGame.this.gameParty.members().forEach(player -> giveAchievement(player, Achievements.BOSSFIGHT_CREEPER_END));
+      //Remove the bossbar
       CreeperGame.this.bossBar.remove(CreeperGame.this.boss);
       CreeperGame.this.region.delete();
       CreeperGame.this.logger.logInfo("The Boss is die!");
       CreeperGame.this.logger.logInfo("End Game!");
       CreeperGame.this.logger.logInfo("Start game end timer!");
+      //Start the game end timer
       new EndGameTimer().start(61 * 20, null, CreeperGame.this.mainSpawnLocation, CreeperGame.this.plugin);
     }
 
   }
 
-  //This methode executes the tasks if the creeper exploded
+  /**
+   * This methode executes the tasks if the creeper exploded
+   * @param entity Required the {@link Creeper} boss
+   */
   public void explodeCreeper(@NotNull Creeper entity) {
     if (!entity.level().isClientSide) {
       float f = entity.isPowered() ? 10.0F : 5.0F;//Edit by Elia
@@ -218,7 +303,10 @@ public class CreeperGame implements Game, Listener {
       ExplosionPrimeEvent event = CraftEventFactory.callExplosionPrimeEvent(entity, CreeperGame.this.explosionRadius * f, true);
       if (!event.isCancelled()) {
         // CraftBukkit end
-        //this.dead = true; Removed by elia
+        /*
+        Removed by elia
+        this.dead = true;
+         */
         //Set new Health and location
         float health = entity.getHealth();
         float newHealth = health + 100.0F;
@@ -230,17 +318,16 @@ public class CreeperGame implements Game, Listener {
         CreeperGame.this.bossBar.remove(CreeperGame.this.boss);
         //Create a new Boss
         CreeperBoss newBoss = new CreeperBoss(l, CreeperGame.this.bossName, newHealth, CreeperGame.this.bossUUID){
-
+          //Override the die methode (for more details, check the called die methode)
           @Override
           public void die(@NotNull DamageSource damageSource) {
             CreeperGame.this.die(damageSource, CreeperGame.this.boss);
           }
-
+          //Override the explodeCreeper methode (for more details, check the called explodeCreeper methode)
           @Override
           public void explodeCreeper() {
             CreeperGame.this.explodeCreeper(CreeperGame.this.boss);
           }
-
         };
         bossUUID = CreeperGame.this.boss.getUUID();
         CreeperGame.this.boss = newBoss;
@@ -257,35 +344,55 @@ public class CreeperGame implements Game, Listener {
     }
   }
 
-  //This methode starts the first attack of the creeper
+  /**
+   * This methode starts the first attack of the creeper
+   * @param seconds The seconds how long the attack lasts
+   * @param location The location for the attack
+   */
   protected void startAttack1(int seconds, Location location){
+    //Create a timer
     new BukkitRunnable() {
       private int ticksElapsed = 0;
       @Override
       public void run() {
+        //Checks if the time ends
         if (ticksElapsed >= seconds){
+          //canceled this runnable
           this.cancel();
+          //Reset elapsed ticks
           ticksElapsed = 0;
+          //delete the region
           CreeperGame.this.region.delete();
+          //Reset the variables
           CreeperGame.this.savedLocation = null;
           CreeperGame.this.ifAttackActive = false;
           CreeperGame.this.isArrowSaveAttackOn = false;
           return;
         }
+        //Create the region border for the boss
         createEntityRegionBorder(CreeperGame.this.radius, location, Particle.FLAME);
         ticksElapsed++;
       }
     }.runTaskTimer(SoulBoss.soulBoss().main(), 0, 1);
   }
 
-  //This methode starts the second attack of the creeper
+  /**
+   * This methode starts the second attack of the creeper
+   */
   public void startAttack2(){
+    //Get every player in the game
     this.gameParty.members().forEach(player -> {
+      //The location of the player
       Location playerLocation = player.getLocation();
+      //Generate strike lightning by the player
       playerLocation.getWorld().strikeLightning(playerLocation);
+      //Create the name for the creeper
       String creeperName = player.getName() + "'s Creeperfriend";
+      //Spawned a new creeper for the player
       new MiniCreepers(playerLocation, creeperName);
+      //Give the player blindness for 10 seconds
       player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 10*20, 255, false, false, false));
+      //Create a random time (in seconds) until the message is sent by the mini creeper
       Random random = new Random();
       int x = random.nextInt(100, 180);
       new BukkitRunnable(){
@@ -293,72 +400,118 @@ public class CreeperGame implements Game, Listener {
         @Override
         public void run() {
           if (y >= x){
+            //Send the player the message
             message(player, gray(creeperName + ": Im here..."));
+            //Canceled this runnable
             this.cancel();
           }
           y++;
         }
       }.runTaskTimer(this.plugin, 0, 1);
+      //Play a sound
       player.playSound(playerLocation, Sound.ENTITY_CREEPER_HURT, 0.7f, 0.3f);
     });
   }
 
-  //This Event kills the game if the party owner disconnects
+  /**
+   * This Event kills the game if the party owner disconnects
+   * @param event This event is called if a player disconnects the server
+   */
   @EventHandler
   private void onPlayerQuitServer(@NotNull PlayerQuitEvent event){
+    //Get the player from the event
     Player player = event.getPlayer();
+    //Checks if the player in the game
     if (this.gameParty.members().contains(player)) {
+      //Checks if the player the game owner
       if (player.getPersistentDataContainer().has(new NamespacedKey(BossFightCreatorMain.bossFightCreator().main(), Integer.toString(this.gameParty.id())))) {
+        //Killed the game
         this.killGame("Party Owner disconnected!", false);
         return;
+            //If the player in the party but not the owner, delete the player from the party
       }else this.gameParty.removePlayer(player);
     }
   }
 
-  //This Event saves a location of the died player
+  /**
+   * This Event saves a location of the died player
+   * @param event This event is called if a player died
+   */
   @EventHandler
   private void onPlayerDie(@NotNull PlayerDeathEvent event){
+    //Get the player from the event
     Player player = event.getPlayer();
+    //Checks if the player in the game
     if (this.gameParty.members().contains(player)) {
+      //Checks if the player the game owner
       if (player == this.gameOwner) {
+        //Start the end timer of this game
         new EndGameTimer().start(61*20, this.gameOwner, this.mainSpawnLocation, this.plugin);
       }else {
+        //Remove the player from the party
         this.gameParty.removePlayer(player);
       }
     }
   }
 
-  //This event loads the attacks
+  /**
+   * This event loads the attacks
+   * @param event This event is called if an entity damaged another entity
+   */
   @EventHandler
   private void onInRegionAttack(@NotNull EntityDamageByEntityEvent event){
+    //Get the damaged entity
     Entity damagedEntity = event.getEntity();
+    //Get the damager
     Entity damager = event.getDamager();
+    //Get the location of the damaged entity
     Location location = damagedEntity.getLocation();
+    //Checks if the arrow saves attack active
     if (isArrowSaveAttackOn);
+    //Checks if the damager a projectile
     if (damager instanceof Projectile projectile);
+    //Checks if the damaged entity the boss
     if (damagedEntity.getPersistentDataContainer().has(NameSpacedKeys.CREEPER_KEY.key()));
+    //Checks if the region contains the boss
     if (containsEntity(boss.getBukkitEntity(), savedLocation, this.radius)) {
+      //cancel the event
       event.setCancelled(true);
       return;
     }
+    //Generate a random number
     Random random = new Random();
     int randomNumber = random.nextInt(1, 100);
+    //Checks if the number = or < then 10
     if (randomNumber <= 10);
+    //Checks if an attack active
     if (!this.ifAttackActive);
+    //Checks if the damaged entity the boss
     if (damagedEntity.getPersistentDataContainer().has(NameSpacedKeys.CREEPER_KEY.key()));
+    //Checks if the damager a projectile
     if (damager instanceof Projectile projectile)
+      //Checks if the arrow saves attack not active
       if (!isArrowSaveAttackOn) {
+        //set the attack to active
         this.ifAttackActive = true;
         this.isArrowSaveAttackOn = true;
+        //Cloned the location and saved this
         this.savedLocation = location.clone();
+        //Create a new region
         this.region = new EntityRegion(location, this.radius, this.boss.getBukkitEntity(), true, false);
+        //Start the attack
         this.startAttack1(200, location);
+        //Set this event to cancel
         event.setCancelled(true);
       }
   }
 
+  /**
+   * This event loads the second attack
+   * @param event This event is called if an entity damaged another entity
+   */
   @EventHandler
   private void onBossDamage(@NotNull EntityDamageByEntityEvent event){
+    //
     Entity bossEntity = event.getEntity();
     Entity damager = event.getDamager();
     Random random = new Random();
