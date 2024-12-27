@@ -16,7 +16,6 @@ import static de.elia.api.messages.builder.MessageBuilder.white;
 
 //This event gives a notice to the recipes for the spawn egg
 public class RecipeListener implements Listener {
-
   @EventHandler
   private void onJoin(@NotNull PlayerJoinEvent event) {
     Player player = event.getPlayer();

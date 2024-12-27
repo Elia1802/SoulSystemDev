@@ -39,6 +39,8 @@ import static de.elia.systemclasses.messages.Message.messageWithPrefix;
 
 
 //This class is the game for the bosses.
+@Deprecated//I WILL UPDATE TO THE SAME SHEMA IN CreeperGame
+//TODO: UPDATE THIS CLASS
 public class ZombieGame implements Listener, Game {
 
   private final Arena arena;

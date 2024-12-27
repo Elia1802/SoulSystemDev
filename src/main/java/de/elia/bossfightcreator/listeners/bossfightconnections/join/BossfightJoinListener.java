@@ -10,11 +10,18 @@ import org.jetbrains.annotations.NotNull;
 import static de.elia.api.messages.builder.MessageBuilder.gold;
 import static de.elia.api.messages.builder.MessageBuilder.gray;
 
-//This Event called if a player joins a party
+/**
+ * This Event called if a player joins a party
+ */
 public class BossfightJoinListener implements Listener {
 
+  /**
+   * This Event called if a player joins a party
+   * @param event This Event is called if a player join the party
+   */
   @EventHandler
   private void onJoin(@NotNull BossFightJoinEvent event){
+    //Send the join message
     event.sendJoinMessage(gold(event.getJoinedPlayer().getName()).append(gray(" has joined the game!")));
   }
 

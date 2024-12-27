@@ -1,0 +1,12 @@
+SKRIPT FÜR SPAWN EGGS BEANSCHAFFUNG
+
+Spieler farmt über das Levelsystem Level/Punkte. 
+Mit den Punkten können die Spieler Spawn eggs über ein Inventar kaufen
+Zudem können die Spieler über das Inventar ihr guthaben und ihre gekauften Rezepte einsehen
+Die zahlung passiert vom punkte guthaben die Level werden nicht runter gerechnet
+
+Beispiel
+
+Spieler hat 50 Punkte somit ist er Level 5
+Alle 10 Punkte + 1 Level
+Wenn wir sagen ein ei kostet 20 Punkte hat der spieler 30 Punkte das Level bleibt aber dann bei 5

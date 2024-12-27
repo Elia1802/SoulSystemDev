@@ -17,11 +17,13 @@ import static de.elia.PluginInfo.VERSION;
 //This class booting this plugin
 public class BootsTrapper implements PluginBootstrap {
 
+  @Override
   public void bootstrap(@NotNull BootstrapContext context) {
     context.getLogger().info("Boot " + NAME + "...");
     context.getLogger().warn("This is the dev build of " + NAME + "!");
   }
 
+  @Override
   @NotNull
   public JavaPlugin createPlugin(@NotNull PluginProviderContext context) {
     context.getLogger().info("Information about this Plugin");
