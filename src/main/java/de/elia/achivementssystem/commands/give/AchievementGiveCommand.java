@@ -33,12 +33,12 @@ public class AchievementGiveCommand extends Command {
     super("achievementgive", "The achievementgive command give the player a Achievement.", "Use /achievementhelp [PLAYER] [ACHIEVEMENT]", Arrays.asList("achievementg", "agive"));
   }
 
-   /**
+  /**
    * The server executes this method when this command is entered
-   * @param sender The {@link CommandSender} is the one that executed the command
-   * @param subCommand The command name (in this code achievementgive)
-   * @param args The arguments of this command
-   * @return Returns true if everything worked, otherwise false
+   * @param sender Source object which is executing this command
+   * @param subCommand The alias of the command used
+   * @param args All arguments passed to the command, split via ' '
+   * @return true if the comands has works without errors
    */
   @Override
   public boolean execute(@NotNull CommandSender sender, @NotNull String subCommand, String[] args) {
@@ -111,7 +111,12 @@ public class AchievementGiveCommand extends Command {
     return false;
   }
 
-  //This methode sends the messages if the admin gives the target an achievement
+  /**
+   * This methode sends the messages if the admin gives the target an achievement
+   * @param player The player who send this message
+   * @param target The target player to get the name for the message
+   * @param achievement The achievement
+   */
   private void sendMessage(@NotNull Player player, @NotNull Player target, @NotNull Achievements achievement){
     PluginLogger logger = AchievementMain.achievementMain().achievementPluginLogger();
     messageWithPrefix(target, gray("You achieved ").append(aqua(achievement.getName())).append(gray(" from the teammember ")).append(aqua(player.getName())).append(gray("!")));

@@ -19,29 +19,50 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
 
-//This class creates the item magic book
+/**
+ * This class creates the item magic book
+ */
 public class Magic_Book {
 
-    private static ComplexItem MB;
+  //Create a variable of the item
+  private static ComplexItem MB;
 
-    public Magic_Book(Plugin plugin) {
-        if (MB == null) {
-            ArrayList<Component> list = new ArrayList<>();
-            list.add(ItemMain.MINI_MESSAGE.deserialize("<gray>You can used this book</gray>"));
-            list.add(ItemMain.MINI_MESSAGE.deserialize("<gray>to cast spells.</gray>"));
-            Component name = ItemMain.MINI_MESSAGE.deserialize("<obfuscated>#</obfuscated> <dark_purple>Magic Book</dark_purple> <obfuscated>#</obfuscated>");
-            MB = TheZepserAPI.Item.create(Material.BOOK, name, list)
-                    .setCustomModelData(1)
-                    .setKey(Complex.MAGIC_BOOK, plugin)
-                    .setAmount(1)
-                    .addAttribute(Attribute.GENERIC_MAX_HEALTH, 20.0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND, ItemMain.itemMain().main())
-                    .addAttribute(Attribute.GENERIC_MAX_HEALTH, 20.0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.OFF_HAND, ItemMain.itemMain().main())
-                    .addFlag(ItemFlag.HIDE_ATTRIBUTES)
-                    .addFlag(ItemFlag.HIDE_ENCHANTS)
-                    .addEnchantment(Enchantment.FLAME, 1)
-                    .setType(Type.MAGIC)
-                    .save();
-        }
+  /**
+   * This creates the item
+   * @param plugin Requires the plugin instance of the main
+   */
+  public Magic_Book(Plugin plugin) {
+    //Checks if the item variable is null
+    if (MB == null) {
+      //Create a list for the lore
+      ArrayList<Component> list = new ArrayList<>();
+      //Fill the list with a lore
+      list.add(ItemMain.MINI_MESSAGE.deserialize("<gray>You can used this book</gray>"));
+      list.add(ItemMain.MINI_MESSAGE.deserialize("<gray>to cast spells.</gray>"));
+      //Create a name
+      Component name = ItemMain.MINI_MESSAGE.deserialize("<obfuscated>#</obfuscated> <dark_purple>Magic Book</dark_purple> <obfuscated>#</obfuscated>");
+      //Create the item
+      MB = TheZepserAPI.Item.create(Material.BOOK, name, list)
+        //Set the custom model data
+        .setCustomModelData(1)
+        //Set the Key of the item
+        .setKey(Complex.MAGIC_BOOK, plugin)
+        //Set the amount
+        .setAmount(1)
+        //Add attributes to the item
+        //TODO: TEST THIS ATTRIBUTES (old attributes was GENERIC_MAX_HEALTH)
+        .addAttribute(Attribute.MAX_HEALTH, 20.0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND, ItemMain.itemMain().main())
+        .addAttribute(Attribute.MAX_HEALTH, 20.0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.OFF_HAND, ItemMain.itemMain().main())
+        //Add flags to the item
+        .addFlag(ItemFlag.HIDE_ATTRIBUTES)
+        .addFlag(ItemFlag.HIDE_ENCHANTS)
+        //Add enchantments to the item
+        .addEnchantment(Enchantment.FLAME, 1)
+        //Set the type of the item
+        .setType(Type.MAGIC)
+        //Save the item
+        .save();
     }
+  }
 }
 

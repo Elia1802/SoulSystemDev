@@ -64,11 +64,11 @@ public class AchievementHelpCommand extends Command {
   }
 
   /**
-   * While the CommandSender enters the command, the server gives suggestions for help ideas
-   * @param sender The {@link CommandSender} is the one that executed the command
-   * @param alias The command name
-   * @param args The arguments of this command
-   * @return Returns true if everything worked, otherwise false
+   * Executed on tab completion for this command, returning a list of options the player can tab through.
+   * @param sender Source object which is executing this command
+   * @param alias the alias being used
+   * @param args All arguments passed to the command, split via ' '
+   * @return a list of tab-completions for the specified arguments. This will never be null. List may be immutable.
    */
   @Override
   @NotNull
