@@ -17,6 +17,8 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * This class is a part of the TheZepserAPI of Zopnote. With this class you can get, drop and give an Item
+ * @author Elia
+ * @since 2.0.0
  */
 public class Item {
 

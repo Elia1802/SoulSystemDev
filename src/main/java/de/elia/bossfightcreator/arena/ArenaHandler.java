@@ -23,6 +23,8 @@ import static de.elia.api.messages.builder.MessageBuilder.*;
 
 /**
  * This class handled and loaded all arenas.
+ * @author Elia Louis, Sinan
+ * @since 1.0.0
  */
 public class ArenaHandler {
 

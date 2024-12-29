@@ -18,6 +18,8 @@ import static de.elia.systemclasses.messages.Message.broadcastWithPrefix;
 
 /**
  * This class give and remove the Player an Achievement.
+ * @author Elia
+ * @since 1.0.0
  */
 @Beta("WARNING! DATA WILL NOW BE STORED IN THE DATABASE! Errors can still occur when saving to the database!")
 public class Achievement {

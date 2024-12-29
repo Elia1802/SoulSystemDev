@@ -38,6 +38,8 @@ public class BossFightCreatorMain implements SoulPlugin {
   /**
    * This methode unloads this plugin.
    * @param javaPlugin Requires the main instance of the system
+   * @author Elia
+   * @since 2.0.0
    */
   @Override
   public void disable(@NotNull JavaPlugin javaPlugin) {

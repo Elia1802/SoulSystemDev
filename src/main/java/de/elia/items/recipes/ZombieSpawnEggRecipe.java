@@ -9,11 +9,19 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ShapedRecipe;
 import org.jetbrains.annotations.Nullable;
 
-//This class creates the recipe for the zombie spawn egg recipe
+/**
+ * This class creates the recipe for the zombie spawn egg recipe
+ * @author Elia
+ * @since 2.0.0
+ */
 public class ZombieSpawnEggRecipe {
 
   private static ShapedRecipe bossSpawnEggRecipe;
 
+  /**
+   * This methode create the recipe
+   * @throws CloneNotSupportedException The object could not or should not be cloned.
+   */
   public static void eggRecipe() throws CloneNotSupportedException {
     ShapedRecipe recipe = new ShapedRecipe(NameSpacedKeys.ZOMBIE_RECIPE_KEY.key(), Item.get(Complex.ZOMBIE_SPAWN_EGG).getItem());
     recipe.shape("ZZZ", "WSW", "CSC");
@@ -24,6 +32,10 @@ public class ZombieSpawnEggRecipe {
     bossSpawnEggRecipe = recipe;
   }
 
+  /**
+   * Get the recipe
+   * @return the recipe
+   */
   @Nullable
   public static ShapedRecipe bossSpawnEggRecipe() {
     return bossSpawnEggRecipe;

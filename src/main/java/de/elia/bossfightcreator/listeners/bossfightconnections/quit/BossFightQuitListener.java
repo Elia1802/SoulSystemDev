@@ -12,6 +12,8 @@ import static de.elia.api.messages.builder.MessageBuilder.gray;
 
 /**
  * This event called if a player quit a party
+ * @author Elia
+ * @since 3.0.0
  */
 public class BossFightQuitListener implements Listener {
 

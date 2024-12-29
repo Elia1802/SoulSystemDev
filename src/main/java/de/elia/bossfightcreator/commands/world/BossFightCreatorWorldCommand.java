@@ -23,6 +23,8 @@ import static de.elia.systemclasses.messages.Message.messageWithPrefix;
 
 /**
  * This command teleports a player in another world
+ * @author Elia
+ * @since 1.0.0
  */
 public class BossFightCreatorWorldCommand extends Command {
 
@@ -57,7 +59,7 @@ public class BossFightCreatorWorldCommand extends Command {
         }else if (args[1].equalsIgnoreCase("world_bossfight")) {
           //Teleport the target to the world
           target.teleport(Bukkit.getWorld("world_bossfight").getSpawnLocation());
-          //Send a confirm messages
+          //Send a confirmation messages
           messageWithPrefix(target, gray("You were teleported into world ").append(aqua("world_bossfight")).append(gray("!")));
           messageWithPrefix(player, gray("You teleported player ").append(aqua(target.getName())).append(gray(" into world ")).append(aqua("world_bossfight")).append(gray("!")));
           return true;
@@ -65,7 +67,7 @@ public class BossFightCreatorWorldCommand extends Command {
         }else if (args[1].equalsIgnoreCase("world")) {
           //Teleport the target to the world
           target.teleport(Bukkit.getWorld("world").getSpawnLocation());
-          //Send a confirm messages
+          //Send a confirmation messages
           messageWithPrefix(target, gray("You were teleported into world ").append(aqua("world")).append(gray("!")));
           messageWithPrefix(player, gray("You teleported player ").append(aqua(target.getName())).append(gray(" into world ")).append(aqua("world")).append(gray("!")));
           return true;

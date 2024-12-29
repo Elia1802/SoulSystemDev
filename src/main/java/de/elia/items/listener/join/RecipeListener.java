@@ -38,11 +38,14 @@ public class RecipeListener implements Listener {
     if (chance == 1) {
       //Generate a random float
       float x = random.nextFloat();
-
+      //Checks if x smaller than 0.5
       if (x < 0.5) {
+        //Send the Player a message
         message(player, white("[Unknown voice] Click this..."));
         message(player, white("[Unknown voice] https://www.youtube.com/watch?v=Gow5H1NG0zA"));
+      //If x higher than 0.5
       }else {
+        //Send the Player a message
         message(player, white("[Unknown voice] Click this..."));
         message(player, white("[Unknown voice] https://www.youtube.com/shorts/YI3-xM45oh8"));
       }

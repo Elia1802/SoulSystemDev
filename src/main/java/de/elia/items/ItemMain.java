@@ -1,12 +1,11 @@
 package de.elia.items;
 
 import de.elia.api.loader.SoulPlugin;
-import de.elia.api.loader.exceptions.SoulPluginLoadException;
 import de.elia.api.logging.PluginLogger;
 
 import de.elia.Main;
 import de.elia.items.items.Item;
-import de.elia.items.recipes.loader.RecipeLoader.SpawnEggLoader;
+import de.elia.items.recipes.loader.RecipeLoader;
 import de.elia.systemclasses.Instances;
 
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -29,19 +28,19 @@ public class ItemMain implements SoulPlugin {
 
   //This methode loads this plugin.
   @Override
-  public void enable(@NotNull JavaPlugin javaPlugin) throws SoulPluginLoadException {
+  public void enable(@NotNull JavaPlugin javaPlugin){
     this.itemLogger().logInfo("Load Item Plugin...");
     itemMain = this;
     this.itemLogger().logInfo("Load items...");
     Item.registerAll(javaPlugin);
-    SpawnEggLoader.loadRecipe(javaPlugin);
+    RecipeLoader.loadRecipe(javaPlugin);
     this.itemLogger().logInfo("Items loaded!");
     this.itemLogger().logInfo("Item plugin loaded!");
   }
 
   //This methode unloads this plugin.
   @Override
-  public void disable(@NotNull JavaPlugin javaPlugin) throws SoulPluginLoadException {
+  public void disable(@NotNull JavaPlugin javaPlugin){
     this.itemLogger().logInfo("Item unloaded!");
     RECIPES.forEach(Bukkit::removeRecipe);
   }

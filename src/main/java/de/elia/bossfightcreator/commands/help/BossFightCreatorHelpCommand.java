@@ -21,6 +21,8 @@ import static de.elia.systemclasses.messages.Message.messageWithPrefix;
 
 /**
  * This command sends a help about the Bossfightcreator plugin
+ * @author Elia
+ * @since 1.0.0
  */
 public class BossFightCreatorHelpCommand extends Command {
 
@@ -42,7 +44,7 @@ public class BossFightCreatorHelpCommand extends Command {
   public boolean execute(@NotNull CommandSender sender, @NotNull String commandLabel, @NotNull String[] args) {
     //Get logger instnace
     PluginLogger logger = BossFightCreatorMain.bossFightCreator().bossFightCreatorLogger();
-    //Checks if the sender is an player
+    //Checks if the sender is a player
     if (sender instanceof Player player) {
       //Checks if the command length correct
       if (args.length == 1) {

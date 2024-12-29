@@ -8,6 +8,11 @@ import org.jetbrains.annotations.NotNull;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+/**
+ * With this you can save, remove and get the achievements from the database
+ * @author Elia
+ * @since 3.0.0
+ */
 public interface AchievementDB {
 
   /**

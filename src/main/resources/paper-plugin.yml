@@ -1,9 +1,9 @@
-name: SoulBossSystem-Test
+name: SoulBossSystem
 bootstrapper: de.elia.BootsTrapper
 loader: de.elia.Loader
 main: de.elia.Main
 api-version: '1.21'
-version: '1.0.0-BETA'
+version: '4.0.0-BETA'
 authors:
   - Elia
   - D1p4k

@@ -22,6 +22,8 @@ import static de.elia.api.messages.builder.MessageBuilder.yellow;
 
 /**
  * This class gets the spawn location for the arenas
+ * @author Elia
+ * @since 1.0.0
  */
 public class ArenaSpawnLocation {
 

@@ -12,6 +12,8 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * This class rebuilds an arena
+ * @author Elia
+ * @since 1.0.0
  */
 public class ArenaReBuilder {
 

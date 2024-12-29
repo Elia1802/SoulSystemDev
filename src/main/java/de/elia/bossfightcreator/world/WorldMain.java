@@ -10,6 +10,8 @@ import java.io.File;
 
 /**
  * This class set a logger for the world creation and load the path for the arena files.
+ * @author Elia
+ * @since 2.0.0
  */
 public class WorldMain {
 

@@ -17,6 +17,8 @@ import java.io.File;
 
 /**
  * This class is an Arena and has all important values for the arena.
+ * @author Elia, Louis, Sinan
+ * @since 1.0.0
  */
 public class Arena {
 

@@ -21,6 +21,8 @@ import java.util.ArrayList;
 
 /**
  * This class creates the item magic book
+ * @author Elia
+ * @since 3.0.0
  */
 public class Magic_Book {
 

@@ -21,6 +21,8 @@ import static de.elia.systemclasses.messages.Message.messageWithPrefix;
 
 /**
  * This command gives the player a help about the item plugin.
+ * @author Elia
+ * @since 2.0.0
  */
 public class ItemHelpCommand extends Command {
 

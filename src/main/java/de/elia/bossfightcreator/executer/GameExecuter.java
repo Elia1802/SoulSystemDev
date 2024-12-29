@@ -46,6 +46,8 @@ import static de.elia.systemclasses.messages.Message.messageWithPrefix;
 
 /**
  * This class executes a game if the player clicked a spawn egg
+ * @author Elia
+ * @since 2.0.0
  */
 public class GameExecuter implements Listener {
 
@@ -151,7 +153,11 @@ public class GameExecuter implements Listener {
     }
   }
 
-  //This methode executes a creeper game
+  /**
+   * This methode execute a creeper game
+   * @param player The game owner
+   * @param item The spawn egg of the creeper boss
+   */
   protected void createCreeperGame(@NotNull Player player, ItemStack item) {
     //Checks if the spawn egg is null
     if (item == null)return;

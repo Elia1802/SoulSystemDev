@@ -15,6 +15,8 @@ import static de.elia.items.ItemMain.MINI_MESSAGE;
 
 /**
  * This class creates the Magic stick
+ * @author Elia
+ * @since 2.0.0
  */
 public class Magic_Stick {
 

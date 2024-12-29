@@ -72,7 +72,11 @@ import static de.elia.api.messages.builder.MessageBuilder.message;
 import static de.elia.api.messages.builder.MessageBuilder.red;
 import static de.elia.bossfightcreator.BossFightCreatorMain.playerStatusMap;
 
-//This class processed the Creeper Bossfights
+/**
+ * This class processed the Creeper Bossfights
+ * @author Elia
+ * @since 3.0.0
+ */
 public class CreeperGame implements Game, Listener {
 
   //Instances:

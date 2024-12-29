@@ -18,6 +18,8 @@ import static de.elia.systemclasses.messages.Message.messageWithPrefix;
 
 /**
  * Give the Player a help about the Achievement Plugin
+ * @author Elia
+ * @since 1.0.0
  */
 public class AchievementHelpCommand extends Command {
 

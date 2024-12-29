@@ -12,7 +12,11 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
 
-//This class overrides the Chunkgenerator of the World "world_bossfight"
+/**
+ * This class overrides the Chunkgenerator of the World "world_bossfight"
+ * @author Elia
+ * @since 2.0.0
+ */
 public class CustomChunkGenerator extends ChunkGenerator {
 
   private final WorldSettings settings = new WorldSettings(null, false, false, false, false, false, false);
@@ -22,7 +26,7 @@ public class CustomChunkGenerator extends ChunkGenerator {
    * A null value is returned if a world should not use a fixed spawn point, and will instead attempt to find one randomly.
    * @param world The world to locate a spawn point for
    * @param random Random generator to use in the calculation
-   * @return
+   * @return Location containing a new spawn point, otherwise null
    */
   @Override
   @Nullable

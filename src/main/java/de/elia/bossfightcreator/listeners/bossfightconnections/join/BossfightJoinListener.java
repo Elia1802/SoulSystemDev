@@ -12,6 +12,8 @@ import static de.elia.api.messages.builder.MessageBuilder.gray;
 
 /**
  * This Event called if a player joins a party
+ * @author Elia
+ * @since 3.0.0
  */
 public class BossfightJoinListener implements Listener {
 

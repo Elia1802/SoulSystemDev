@@ -16,6 +16,8 @@ import java.util.ArrayList;
 
 /**
  * This class creates the zombie boss spawn egg
+ * @author Elia
+ * @since 2.0.0
  */
 public class Zombie_Spawn_Egg {
 

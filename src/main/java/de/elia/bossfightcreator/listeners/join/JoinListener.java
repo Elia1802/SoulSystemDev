@@ -10,6 +10,8 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * This event teleports the player to the World "world" if the player is in the World "world_bossfight"
+ * @author Elia
+ * @since 2.0.0
  */
 public class JoinListener implements Listener {
 

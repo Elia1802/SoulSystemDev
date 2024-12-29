@@ -17,6 +17,8 @@ import java.util.Map;
  * This event gives the player a game status.
  * State 0: player hasn't a game
  * State 1: player has a game
+ * @author Elia
+ * @since 2.0.0
  */
 public class LoginListener implements Listener {
 

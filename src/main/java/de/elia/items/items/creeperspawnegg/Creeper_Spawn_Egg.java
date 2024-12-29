@@ -18,6 +18,8 @@ import static de.elia.items.ItemMain.MINI_MESSAGE;
 
 /**
  * This class creates the creeper boss spawn egg
+ * @author Elia
+ * @since 3.0.0
  */
 public class Creeper_Spawn_Egg {
 

@@ -31,6 +31,8 @@ public class ItemGiveCommand extends Command {
 
   /**
    * Set the command, description, usage message and aliases
+   * @author Elia
+   * @since 2.0.0
    */
   public ItemGiveCommand() {
     super("itemgive", "The itemgive command give the player a specify item", "Use /itemgive [ITEM] [AMOUNT] [PLAYER]", Arrays.asList("igive", "itemg"));

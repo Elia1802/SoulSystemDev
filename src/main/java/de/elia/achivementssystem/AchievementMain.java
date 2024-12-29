@@ -15,6 +15,8 @@ import java.sql.SQLException;
 
 /**
  * The Main of the Achievement Plugin
+ * @author Elia
+ * @since 1.0.0
  */
 public class AchievementMain implements SoulPlugin {
 

@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "de.elia"
-version = "1.0.0-BETA"
+version = "4.0.0-BETA"
 description = "Dev-Plugin für SoulSMP"
 
 java {

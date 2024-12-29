@@ -23,6 +23,8 @@ import static de.elia.systemclasses.messages.Message.messageWithPrefix;
 
 /**
  * The Command to give a Player an Achievement
+ * @author Elia
+ * @since 1.0.0
  */
 public class AchievementGiveCommand extends Command {
 

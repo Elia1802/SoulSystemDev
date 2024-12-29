@@ -30,6 +30,7 @@ import java.io.IOException;
 
 /**
  * @author Sinan, Elia
+ * @since 1.0.0
  * Load and paste the schematics in the Bossfightworld
  */
 public class SchematicBuilder {
