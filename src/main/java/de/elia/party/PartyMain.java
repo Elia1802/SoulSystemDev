@@ -3,8 +3,6 @@ package de.elia.party;
 import de.elia.api.loader.SoulPlugin;
 import de.elia.api.loader.exceptions.SoulPluginLoadException;
 
-import de.elia.Main;
-
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 

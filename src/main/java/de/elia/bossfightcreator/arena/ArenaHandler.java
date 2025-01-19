@@ -1,6 +1,5 @@
 package de.elia.bossfightcreator.arena;
 
-import de.elia.Main;
 import de.elia.systemclasses.Instances;
 
 import org.bukkit.Bukkit;

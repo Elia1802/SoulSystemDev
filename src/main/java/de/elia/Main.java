@@ -95,31 +95,13 @@ public class Main extends JavaPlugin {
       return;
     }
 
-    try {
-      MAIN_LOGGER.logInfo("Load Item...");
-      ITEM_MAIN.enable(this);
-      MAIN_LOGGER.logInfo("Item loaded!");
-    } catch (SoulPluginLoadException exception) {
-      MAIN_LOGGER.logError("An error occurred while loading Item plugin! (See Stacktrace)");
-      saveError(this, exception, "Main-onEnable-Create_an_error_by_loading_Item=SoulPluginLoadException");
-      MAIN_LOGGER.stacktrace(exception);
-      MAIN_LOGGER.logWarning("Disable SoulBossSystem");
-      this.disable();
-      return;
-    }
+    MAIN_LOGGER.logInfo("Load Item...");
+    ITEM_MAIN.enable(this);
+    MAIN_LOGGER.logInfo("Item loaded!");
 
-    try {
-      MAIN_LOGGER.logInfo("Load BossFightCreator...");
-      BOSS_FIGHT_CREATOR.enable(this);
-      MAIN_LOGGER.logInfo("BossFightCreator loaded!");
-    } catch (SoulPluginLoadException exception) {
-      MAIN_LOGGER.logError("An error occurred while loading BossFightCreator plugin! (See Stacktrace)");
-      saveError(this, exception, "Main-onEnable-Create_an_error_by_loading_BossFightCreator=SoulPluginLoadException");
-      MAIN_LOGGER.stacktrace(exception);
-      MAIN_LOGGER.logWarning("Disable SoulBossSystem");
-      this.disable();
-      return;
-    }
+    MAIN_LOGGER.logInfo("Load BossFightCreator...");
+    BOSS_FIGHT_CREATOR.enable(this);
+    MAIN_LOGGER.logInfo("BossFightCreator loaded!");
 
     try {
       MAIN_LOGGER.logInfo("Load SoulBoss...");
@@ -231,27 +213,13 @@ public class Main extends JavaPlugin {
         MAIN_LOGGER.logWarning("de.elia.Main not corect stopped!");
       }
 
-      try {
-        MAIN_LOGGER.logInfo("Unload BossFightCreator...");
-        BOSS_FIGHT_CREATOR.disable(this);
-        MAIN_LOGGER.logInfo("BossFightCreator unloaded!");
-      } catch (SoulPluginLoadException exception) {
-        saveError(this, exception, "Main-onDisable-An_error_occurred_by_unloading_BossFightCreator=SoulPluginLoadException");
-        MAIN_LOGGER.logError("An error occurred while disabling BossFightCreator! (See Stacktrace)");
-        MAIN_LOGGER.stacktrace(exception);
-        MAIN_LOGGER.logWarning("de.elia.Main not corect stopped!");
-      }
+      MAIN_LOGGER.logInfo("Unload BossFightCreator...");
+      BOSS_FIGHT_CREATOR.disable(this);
+      MAIN_LOGGER.logInfo("BossFightCreator unloaded!");
 
-      try {
-        MAIN_LOGGER.logInfo("Unload Item...");
-        ITEM_MAIN.disable(this);
-        MAIN_LOGGER.logInfo("Item unloaded!");
-      } catch (SoulPluginLoadException exception) {
-        saveError(this, exception, "Main-onDisable-An_error_occurred_by_unloading_Item=SoulPluginLoadException");
-        MAIN_LOGGER.logError("An error occurred while disabling Item! (See Stacktrace)");
-        MAIN_LOGGER.stacktrace(exception);
-        MAIN_LOGGER.logWarning("de.elia.Main not corect stopped!");
-      }
+      MAIN_LOGGER.logInfo("Unload Item...");
+      ITEM_MAIN.disable(this);
+      MAIN_LOGGER.logInfo("Item unloaded!");
 
       try {
         MAIN_LOGGER.logInfo("Unload SoulBoss...");

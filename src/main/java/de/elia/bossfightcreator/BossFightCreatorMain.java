@@ -2,10 +2,8 @@ package de.elia.bossfightcreator;
 
 import de.elia.api.game.Game;
 import de.elia.api.loader.SoulPlugin;
-import de.elia.api.loader.exceptions.SoulPluginLoadException;
 import de.elia.api.logging.PluginLogger;
 
-import de.elia.Main;
 import de.elia.systemclasses.Instances;
 
 import org.bukkit.entity.Player;

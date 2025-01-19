@@ -3,7 +3,6 @@ package de.elia.items;
 import de.elia.api.loader.SoulPlugin;
 import de.elia.api.logging.PluginLogger;
 
-import de.elia.Main;
 import de.elia.items.items.Item;
 import de.elia.items.recipes.loader.RecipeLoader;
 import de.elia.systemclasses.Instances;

@@ -1,7 +1,5 @@
 package de.elia.systemclasses.keys;
 
-import de.elia.Main;
-
 import org.bukkit.NamespacedKey;
 
 //Here all final NamespacedKeys saved of this plugin

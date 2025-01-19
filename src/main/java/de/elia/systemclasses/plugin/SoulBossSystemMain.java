@@ -4,7 +4,6 @@ import de.elia.api.loader.SoulPlugin;
 import de.elia.api.loader.exceptions.SoulPluginLoadException;
 import de.elia.api.logging.PluginLogger;
 
-import de.elia.Main;
 import de.elia.systemclasses.plugin.configuation.SoulBossSystemConfigurationLoader;
 import de.elia.systemclasses.Instances;
 
