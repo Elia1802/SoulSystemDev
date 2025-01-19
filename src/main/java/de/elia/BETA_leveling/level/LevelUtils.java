@@ -1,7 +1,8 @@
-package de.elia.level;
+package de.elia.BETA_leveling.level;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import de.elia.Main;
 import de.elia.api.events.level.LevelUpEvent;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -66,7 +67,7 @@ public class LevelUtils {
         double newLevels = convertPointToLevel(newPoints);
         if (oldLevels < newLevels) {
             LevelUpEvent event = new LevelUpEvent(player, oldLevels, newLevels);
-            Main.main().pluginManager.callEvent(event);
+            Main.main().getServer().getPluginManager().callEvent(event);
         }
     }
 }

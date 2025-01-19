@@ -1,6 +1,6 @@
-package de.elia;
+package de.elia.BETA_leveling;
 
-import de.elia.level.LevelUtils;
+import de.elia.BETA_leveling.level.LevelUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

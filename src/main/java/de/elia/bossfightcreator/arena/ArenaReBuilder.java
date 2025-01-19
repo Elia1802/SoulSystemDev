@@ -1,5 +1,6 @@
 package de.elia.bossfightcreator.arena;
 
+import de.elia.Main;
 import de.elia.api.logging.error.SaveError;
 
 import de.elia.bossfightcreator.BossFightCreatorMain;

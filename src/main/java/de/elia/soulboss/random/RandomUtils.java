@@ -1,5 +1,6 @@
 package de.elia.soulboss.random;
 
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.item.ItemStack;
 
@@ -11,9 +12,9 @@ public class RandomUtils {
     Random random = new Random();
     float x = random.nextFloat();
     if (x < chance) {
-      zombie.equipItemIfPossible(ItemStack.fromBukkitCopy(item1));
+      zombie.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.fromBukkitCopy(item1));
     } else {
-      zombie.equipItemIfPossible(ItemStack.fromBukkitCopy(item2));
+      zombie.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.fromBukkitCopy(item2));
     }
   }
 }

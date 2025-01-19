@@ -1,5 +1,6 @@
 package de.elia.bossfightcreator.world;
 
+import de.elia.Main;
 import de.elia.systemclasses.worldsettings.WorldSettings;
 
 import org.bukkit.Location;

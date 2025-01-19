@@ -1,11 +1,10 @@
-package de.elia.events;
+package de.elia.BETA_leveling.events;
 
 import de.elia.api.achievements.Achievements;
 import de.elia.api.events.achievement.AchievementGiveEvent;
 import de.elia.api.messages.builder.MessageBuilder;
-import de.elia.level.Point;
-import de.elia.level.LevelUtils;
-import de.elia.overrides.Message;
+import de.elia.BETA_leveling.level.Point;
+import de.elia.BETA_leveling.level.LevelUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
@@ -19,17 +18,18 @@ import static de.elia.api.messages.builder.MessageBuilder.gray;
 
 public class PointEvents implements Listener {
 
-    private final Message message = new Message();
+    private final MessageBuilder message = new MessageBuilder();
 
     @EventHandler
     private void onAchievement(@NotNull AchievementGiveEvent event){
         Player player = event.getPlayer();
         Achievements triggeredAchievement = event.getAchievement();
-        var achievement = Ac.BOSSFIGHT_ACHIEVEMENT;
+        var achievement = Point.SOUL_BOSSFIGHT_ACHIEVEMMENT;
         if (triggeredAchievement == achievement.getObject()) {
-            message.messageWithPrefix(player, gray(achievement.getCategory().getName()));
+            MessageBuilder.messageWithPrefix(player, gray(achievement.getCategory().getName()));
             LevelUtils.addPoints(player, achievement.getPoints());
         }
+
     }
 
     @EventHandler
@@ -59,14 +59,14 @@ public class PointEvents implements Listener {
     }
 
     @EventHandler
-    private void onGrassBlock(@NotNull EntityPickupItemEvent event){
+    private void onGranite(@NotNull EntityPickupItemEvent event){
         Entity entity = event.getEntity();
         Item item = event.getItem();
         if (entity instanceof Player player) {
             if (item.getItemStack().getType() == Material.GRASS_BLOCK) {
-                var grass_block = Point.GRASS_BLOCK;
-                message.messageWithPrefix(player, gray(grass_block.getCategory().getName()));
-                LevelUtils.addPoints(player, grass_block.getPoints());
+                var granite = Point.GRANITE;
+                message.messageWithPrefix(player, gray(granite.getCategory().getName()));
+                LevelUtils.addPoints(player, granite.getPoints());
             }
         }
     }
@@ -77,7 +77,7 @@ public class PointEvents implements Listener {
         Item item = event.getItem();
         if (entity instanceof Player player) {
             if (item.getItemStack().getType() == Material.BIRCH_WOOD) {
-                var birch_wood = Point.BIRCH_WOOD;
+                var birch_wood = Point.DIORITE;
                 message.messageWithPrefix(player, gray(birch_wood.getCategory().getName()));
                 LevelUtils.addPoints(player, birch_wood.getPoints());
             }

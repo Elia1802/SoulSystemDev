@@ -1,4 +1,4 @@
-package de.elia;
+package de.elia.BETA_leveling;
 
 import org.bukkit.Server;
 import org.bukkit.command.Command;

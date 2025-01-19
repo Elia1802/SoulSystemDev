@@ -1,4 +1,4 @@
-package de.elia.level;
+package de.elia.BETA_leveling.level;
 
 import de.elia.api.achievements.Achievements;
 import org.bukkit.Material;

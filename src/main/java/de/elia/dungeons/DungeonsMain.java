@@ -1,5 +1,6 @@
 package de.elia.dungeons;
 
+import de.elia.Main;
 import de.elia.api.loader.SoulPlugin;
 import de.elia.api.loader.exceptions.SoulPluginLoadException;
 import de.elia.api.logging.PluginLogger;
