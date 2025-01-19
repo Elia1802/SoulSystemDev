@@ -36,7 +36,7 @@ repositories {
 }
 
 dependencies {
-  paperweight.paperDevBundle("1.21.3-R0.1-SNAPSHOT")
+  paperweight.paperDevBundle("1.21.4-R0.1-20241205.222346-7")
   implementation(platform("com.intellectualsites.bom:bom-newest:1.37"))
   implementation("com.fastasyncworldedit:FastAsyncWorldEdit-Core:2.9.2")
   implementation("com.fastasyncworldedit:FastAsyncWorldEdit-Bukkit:2.9.2") { isTransitive = false }

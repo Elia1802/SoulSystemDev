@@ -32,7 +32,14 @@ public class BootsTrapper implements PluginBootstrap {
     context.getLogger().info("API-Version: " + API_VERSION);
     context.getLogger().info("Version: " + VERSION);
     context.getLogger().info("Authors: " + AUTHOR);
+    context.getLogger().info("Booting finished!");context.getLogger().info("Information about this Plugin");
+    context.getLogger().info("Name: " + NAME);
+    context.getLogger().info("API-Name: " + API_NAME);
+    context.getLogger().info("API-Version: " + API_VERSION);
+    context.getLogger().info("Version: " + VERSION);
+    context.getLogger().info("Authors: " + AUTHOR);
     context.getLogger().info("Booting finished!");
+    context.getLogger().info("Load Main...");
     context.getLogger().info("Load Main...");
     return new Main();
   }
