@@ -317,11 +317,10 @@ public class Main extends JavaPlugin {
     getPluginManager().disablePlugin(this);
   }
 
-  //Gets worldedit
-  @Deprecated//Update to FastAsynchronWorldedit
+  //Gets FastAsyncWorldEdit
   @Nullable
   public Plugin worldEditPlugin() {
-    return getPluginManager().getPlugin("WorldEdit");
+    return getPluginManager().getPlugin("FastAsyncWorldEdit");
   }
 
   //Gets the database config
