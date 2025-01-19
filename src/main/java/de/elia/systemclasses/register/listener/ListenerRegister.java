@@ -1,6 +1,5 @@
 package de.elia.systemclasses.register.listener;
 
-import de.elia.Main;
 import de.elia.achivementssystem.listeners.bossfight.AchievementBossFightListener;
 import de.elia.bossfightcreator.listeners.bossfightconnections.join.BossfightJoinListener;
 import de.elia.bossfightcreator.listeners.bossfightconnections.quit.BossFightQuitListener;

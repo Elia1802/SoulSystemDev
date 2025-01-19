@@ -2,7 +2,6 @@ package de.elia.level;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import de.elia.Main;
 import de.elia.api.events.level.LevelUpEvent;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
