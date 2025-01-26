@@ -11,7 +11,7 @@ import de.elia.items.listener.join.RecipeListener;
 import de.elia.items.listener.magicbook.MagicBookListener;
 import de.elia.items.listener.magicstick.MagicStickListener;
 import de.elia.soulboss.entitys.zombie.listener.DropListener;
-import de.elia.soulboss.entitys.zombie.ZombieBoss.ZombieBossListener;
+//import de.elia.soulboss.entitys.zombie.ZombieBoss.ZombieBossListener;
 import de.elia.soulboss.entitys.zombie.listener.AttackListener;
 
 import org.bukkit.event.Listener;
@@ -35,7 +35,7 @@ public class ListenerRegister {
     LISTENERS.add(new RecipeListener());
     LISTENERS.add(new MagicBookListener(Main.main()));
     LISTENERS.add(new DropListener());
-    LISTENERS.add(new ZombieBossListener());
+    //LISTENERS.add(new ZombieBossListener());
     LISTENERS.add(new AttackListener());
     LISTENERS.add(new JoinListener());
     LISTENERS.add(new BossfightJoinListener());

@@ -1,6 +1,6 @@
 package de.elia.soulboss.entitys.zombie;
 
-import de.elia.soulboss.entitys.BossEntity;
+import de.elia.api.entities.BossEntity;
 import de.elia.soulboss.entitys.zombie.equipment.armors.boots.Boots;
 import de.elia.soulboss.entitys.zombie.equipment.armors.chestplate.Chestplate;
 import de.elia.soulboss.entitys.zombie.equipment.armors.helmet.Helmet;
@@ -85,6 +85,7 @@ public class ZombieBoss extends Zombie implements BossEntity {
     return this.uuid;
   }
 
+  @Deprecated(forRemoval = true)//This is moved to the game class
   public static class ZombieBossListener implements Listener {
 
     @EventHandler
