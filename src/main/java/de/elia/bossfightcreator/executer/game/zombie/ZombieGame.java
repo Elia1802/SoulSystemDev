@@ -1,331 +1,405 @@
 package de.elia.bossfightcreator.executer.game.zombie;
 
 import de.elia.api.achievements.Achievements;
+import de.elia.api.entities.BossEntity;
 import de.elia.api.game.Game;
+import de.elia.api.logging.PluginLogger;
 import de.elia.api.timing.timer.TimerTasks;
 import de.elia.api.timing.utils.TimerUtils;
-import de.elia.api.timing.utils.TimerUtils.TimeRunnable;
-
 import de.elia.bossfightcreator.BossFightCreatorMain;
 import de.elia.bossfightcreator.arena.Arena;
 import de.elia.bossfightcreator.arena.ArenaReBuilder;
-import de.elia.bossfightcreator.arena.ArenaSpawnLocation;
+import de.elia.bossfightcreator.executer.game.creeper.CreeperGame;
 import de.elia.party.Party;
 import de.elia.soulboss.entitys.zombie.ZombieBoss;
-
+import de.elia.systemclasses.keys.NameSpacedKeys;
 import net.minecraft.world.damagesource.DamageSource;
-
+import net.minecraft.world.entity.Entity;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
-
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.UUID;
+
 import static de.elia.achivementssystem.achievement.Achievement.giveAchievement;
-import static de.elia.api.messages.builder.MessageBuilder.aqua;
-import static de.elia.api.messages.builder.MessageBuilder.darkRed;
-import static de.elia.api.messages.builder.MessageBuilder.gold;
+import static de.elia.api.entityRegion.EntityRegionBuilder.containsEntity;
+import static de.elia.api.entityRegion.EntityRegionBuilder.createEntityRegionBorder;
+import static de.elia.api.messages.builder.MessageBuilder.darkPurple;
 import static de.elia.api.messages.builder.MessageBuilder.gray;
 import static de.elia.api.messages.builder.MessageBuilder.message;
 import static de.elia.api.messages.builder.MessageBuilder.red;
-import static de.elia.systemclasses.messages.Message.messageWithPrefix;
+import static de.elia.bossfightcreator.BossFightCreatorMain.playerStatusMap;
 
+public class ZombieGame implements Game, Listener {
 
-//This class is the game for the bosses.
-@Deprecated//I WILL UPDATE TO THE SAME SHEMA IN CreeperGame
-//TODO: UPDATE THIS CLASS
-public class ZombieGame implements Listener, Game {
-
-  private final Arena arena;
-  private final Player gameOwner;
+  //Instances:
+  //An instance of the plugin logger
+  private final PluginLogger logger = BossFightCreatorMain.bossFightCreator().bossFightCreatorLogger();
+  //An instance of the spawn location of the world "world"
+  Location worldSpawnLocation = Bukkit.getWorld("world").getSpawnLocation();
+  //An instance of the main class
   private final JavaPlugin plugin;
-  private final String bossName;
-  private final Location spawnLocation;
-  public final Party party;
-  private ZombieBoss boss;
-  private boolean isBossDie = false;
-  
 
-  //This creates a new game.
-  public ZombieGame(@NotNull Arena arena, @NotNull Player gameOwner, JavaPlugin plugin, @NotNull Party party) {
+  //Variables
+  //The arena of this game
+  private final Arena arena;
+  //The game owner of this game
+  private final Player gameOwner;
+  //The spawn location of the arena
+  private final Location spawnLocation;
+  //The party of the game
+  private final Party gameParty;
+  //The bossbar of the boss in this game
+  private final GameBossBar bossBar;
+  //The name of the boss
+  private final String bossName;
+  //The boss
+  private ZombieBoss boss;
+  //The uuid of the boss
+  private UUID bossUUID;
+  //a boolean to check if the boss is dead
+  private boolean bossDeath = false;
+
+  public ZombieGame(@NotNull JavaPlugin plugin, @NotNull Arena arena, @NotNull Player gameOwner, @NotNull Location spawnLocation, @NotNull Party gameParty, @NotNull String bossName) {
+    //Set the instances
+    this.plugin = plugin;
     this.arena = arena;
     this.gameOwner = gameOwner;
-    this.plugin = plugin;
-    this.spawnLocation = ArenaSpawnLocation.spawnLocation(arena.getArenaID(), gameOwner);
-    this.bossName = "boss_" + arena.getArenaID() + "_" + gameOwner.getUniqueId();
-    this.party = party;
-    Bukkit.getPluginManager().registerEvents(this, plugin);
+    this.spawnLocation = spawnLocation;
+    this.gameParty = gameParty;
+    this.bossName = bossName;
+    this.bossBar = new GameBossBar();
+    //Register this class as event
     ALL_ACTIVE_GAMES.add(this);
-    BossFightCreatorMain.bossFightCreator().bossFightCreatorLogger().logInfo("Start the Countdown for the start!");
-    new GameStartTimer().start(121*20, gameOwner, this.spawnLocation, plugin);
+    plugin.getServer().getPluginManager().registerEvents(this, plugin);
+    //Log the start information
+    this.logger.logInfo("Start the Zombie-Game Start-Countdown!");
+    //Start the start timer
+    new GameStartTimer().start(121*20, gameOwner, spawnLocation, plugin);
   }
 
-  //This starts the game.
-  public void startGame() {
-    BossFightCreatorMain.bossFightCreator().bossFightCreatorLogger().logInfo("Spawn the Boss...");
-    new BukkitRunnable(){
+  /**
+   * Start the game
+   */
+  public void startGame(){
+    this.logger.logInfo("Spawn the boss...");
+    new BukkitRunnable() {
       @Override
       public void run() {
-        ZombieGame.this.boss = new ZombieBoss(ZombieGame.this.spawnLocation, ZombieGame.this.bossName){
+        //Spawn the boss and override the die methode
+        ZombieGame.this.boss = new ZombieBoss(ZombieGame.this.spawnLocation, ZombieGame.this.bossName) {
           @Override
-          public void die(@NotNull DamageSource damageSource) {
-            Bukkit.getWorld("world_bossfight").strikeLightningEffect(ZombieGame.this.boss.getBukkitEntity().getLocation());//TEST (Info next line)
-            /*
-            OLD: Bukkit.getWorld("world_bossfight").strikeLightningEffect(this.getBukkitCreature().getLocation());
-            NEW: Bukkit.getWorld("world_bossfight").strikeLightningEffect(ZombieGame.this.boss.getBukkitEntity().getLocation());
-            Change because in the old call, the method getBukkitCreator no longer exists
-             */
-            BossFightCreatorMain.bossFightCreator().bossFightCreatorLogger().logInfo("The Boss " + this + this.getName() + "is death!");
-            ZombieGame.this.party.members().forEach(player -> giveAchievement(player, Achievements.BOSSFIGHT_ZOMBIE_END));
+          public void die(@NotNull DamageSource damageSource){
+            //Create a strike lightning effect on the death position of the boss
+            Bukkit.getWorld("world_bossfight").strikeLightningEffect(ZombieGame.this.boss.getBukkitEntity().getLocation());
+            //Log the boss is dead
+            ZombieGame.this.logger.logInfo("The Boss " + this + this.getName() + " is dead!");
             super.die(damageSource);
-            BossFightCreatorMain.bossFightCreator().bossFightCreatorLogger().logInfo("The Boss is die! End Game...");
-            BossFightCreatorMain.bossFightCreator().bossFightCreatorLogger().logInfo("Start the GameEndTimer!");
-            ZombieGame.this.party.members().forEach(gamePlayer -> new GameEndTimer().start(60*20, gamePlayer, Bukkit.getWorld("world").getSpawnLocation(), ZombieGame.this.plugin));
+            //Send logs
+            ZombieGame.this.logger.logInfo("The Boss is dead!, End game...");
+            ZombieGame.this.logger.logInfo("Start end timer...");
+            //Give every game player the achievement
+            ZombieGame.this.gameParty.members().forEach(partyPlayer -> {
+              giveAchievement(partyPlayer, Achievements.BOSSFIGHT_ZOMBIE_END);
+            });
+            //Start end timer
+            new ZombieGame.GameEndTimer().start(60*20, null, Bukkit.getWorld("world").getSpawnLocation(), plugin);
           }
         };
+        ZombieGame.this.bossUUID = ZombieGame.this.boss.getUUID();
       }
     }.runTask(this.plugin);
+    this.logger.logInfo("Boss spawned!");
+    this.logger.logInfo("Game started!");
   }
 
-  //This methode ends this game
-  public void end(Location location) {
-    BossFightCreatorMain.bossFightCreator().bossFightCreatorLogger().logInfo("Teleport all game players in the World!");
-    this.party.members().forEach(player -> {
-      BossFightCreatorMain.bossFightCreator().bossFightCreatorLogger().logInfo("Teleport the game player " + player.getName() + " in the World!");
-      player.teleport(Bukkit.getWorld("world").getSpawnLocation());
-      BossFightCreatorMain.bossFightCreator().bossFightCreatorLogger().logInfo("Reset the status of the Player!");
-      BossFightCreatorMain.playerStatusMap().replace(player, 0);
+  public void endGame(@NotNull Location spawnLocation){
+    this.logger.logInfo("Teleport all Players to the normal world (Location: " + spawnLocation + ") and reset the game status of the players!");
+    this.gameParty.members().forEach(partyPlayer -> {
+      partyPlayer.teleport(spawnLocation);
+      message(partyPlayer, darkPurple("Thank you ").append(gray("for playing this ")).append(darkPurple("boss fight")).append(gray("! We hope you ")).append(darkPurple("enjoyed ")).append(gray("it!")));
+      playerStatusMap().replace(partyPlayer, 0);
     });
-    BossFightCreatorMain.bossFightCreator().bossFightCreatorLogger().logInfo("Remove the party!");
-    party.removeParty(gameOwner);
-    BossFightCreatorMain.bossFightCreator().bossFightCreatorLogger().logInfo("Rebuild the arena " + this.arena.getArenaID());
+    this.logger.logInfo("Remove the party of this game!");
+    this.gameParty.removeParty(this.gameOwner);
+    this.logger.logInfo("Rebuild the arena " + this.arena.getName() + this.arena.getArenaID());
     ArenaReBuilder.reBuildArena(this.arena);
+    this.logger.logInfo("Remove this game!");
     ALL_ACTIVE_GAMES.remove(this);
-    BossFightCreatorMain.bossFightCreator().bossFightCreatorLogger().logInfo("Game successful end!");
+    this.logger.logInfo("Game successful end!");
   }
 
-  //This methode killed a game with a reason
+  /**
+   * This methode kills this game
+   * @param reason Required the reason
+   * @param isRestart If not a restart, unload the game "normal"
+   */
   @Override
-  public void kill(String reason, boolean isRestart){
-    this.killGame(reason, isRestart);
-  }
-
-  //This methode killed a game with a reason
-  public void killGame(String reason, boolean isRestart){
+  public void kill(String reason, boolean isRestart) {
     if (!isRestart) {
-      BossFightCreatorMain.bossFightCreator().bossFightCreatorLogger().logInfo("Teleport all game players in the World!");
-      this.party.members().forEach(player -> {
-        message(player, red("THE GAME ENDED BECAUSE: " + reason + "!"));
-        BossFightCreatorMain.bossFightCreator().bossFightCreatorLogger().logInfo("Teleport the game player " + player.getName() + " in the World!");
-        player.teleport(Bukkit.getWorld("world").getSpawnLocation());
-        BossFightCreatorMain.bossFightCreator().bossFightCreatorLogger().logInfo("Reset the status of the Player!");
-        BossFightCreatorMain.playerStatusMap().replace(player, 0);
-      });
-      this.boss.die(this.boss.damageSources().genericKill());
-      BossFightCreatorMain.bossFightCreator().bossFightCreatorLogger().logInfo("Remove the party!");
-      party.removeParty(gameOwner);
-      BossFightCreatorMain.bossFightCreator().bossFightCreatorLogger().logInfo("Rebuild the arena " + this.arena.getArenaID());
-      ArenaReBuilder.reBuildArena(this.arena);
-      BossFightCreatorMain.bossFightCreator().bossFightCreatorLogger().logInfo("Game successful end!");
-      ALL_ACTIVE_GAMES.remove(this);
+      this.gameParty.members().forEach(partyPlayer -> message(partyPlayer, red("THE GAME ENDED BECAUSE: " + reason + "!")));
+      endGame(this.spawnLocation);
     }
   }
 
-  //Gets the Arena of this game.
-  @NotNull
-  public Arena getArena() {
-    return this.arena;
-  }
-
-  //Gets the ZombieBoss of this game.
-  @NotNull
-  public ZombieBoss getBoss() {
-    return this.boss;
-  }
-
-  //This event ends this game if the game owner disconnects.
   @EventHandler
-  private void onPlayerQuitServer(@NotNull PlayerQuitEvent event) {
-    if (event.getPlayer() == this.gameOwner) {
-      party.members().forEach(player -> {
-        message(player, darkRed("THE OWNER OF THIS GAME LEFT! THE WORLD WILL BE CLOSED!"));
-        this.killGame("GAME OWNER DISCONNECTED", false);
-        BossFightCreatorMain.playerStatusMap().replace(player, 0);
-        return;
-      });
-    }else if (party.members().contains(event.getPlayer())) {
-      party.members().forEach(player -> {
-        message(this.gameOwner, gray("The player ").append(aqua(player.getName())).append(gray(" was kicked on the game because he left the server!")));
-        BossFightCreatorMain.playerStatusMap().replace(player, 0);
-      });
+  private void onPlayerDisconnectServerListener(@NotNull PlayerQuitEvent event) {
+    var player = event.getPlayer();
+    if (this.gameParty.members().contains(player)) {
+      if (player.getPersistentDataContainer().has(new NamespacedKey(this.plugin, Integer.toString(this.gameParty.id())))) {
+        this.kill("Party Owner disconnected!", false);
+      }else {
+        this.gameParty.members().remove(player);
+        playerStatusMap().replace(player, 0);
+      }
     }
   }
 
-  //This event kills the game or kicks a player if he dies
   @EventHandler
-  private void onPlayerDie(@NotNull PlayerDeathEvent event) {
-    if (event.getPlayer() == this.gameOwner) {
-      party.members().forEach(player -> {
-        party.members().forEach(player1 -> message(player1, red("The game owner died! The game end now!")));this.party.removePlayer(player);
-        this.killGame("GAME OWNER DIED", false);
-      });
-    }else {
-      party.members().forEach(player -> {
-        message(this.gameOwner, gray("The player ").append(aqua(player.getName())).append(gray(" died so he is eliminated!")));
-        message(event.getPlayer(), gold("Du bist gestorben und somit raus!"));
-        party.removePlayer(event.getPlayer());
-        BossFightCreatorMain.playerStatusMap().replace(event.getPlayer(), 0);
-      });
+  private void onPlayerDiedListener(@NotNull PlayerDeathEvent event) {
+    var player = event.getPlayer();
+    if (this.gameParty.members().contains(player)) {
+      if (player.getPersistentDataContainer().has(new NamespacedKey(this.plugin, Integer.toString(this.gameParty.id())))) {
+        new GameEndTimer().start(61, null, this.spawnLocation, this.plugin);
+      }else {
+        this.gameParty.members().remove(player);
+        playerStatusMap().replace(player, 0);
+      }
     }
   }
 
-  //This class creates a timer for the start.
-  public class GameStartTimer extends TimerTasks {
+  @EventHandler
+  private void onPotion(@NotNull EntitySpawnEvent event){
+    var entity = event.getEntity();
+    if (entity.getType() == EntityType.ZOMBIE) {
+      if (entity.getPersistentDataContainer().has(NameSpacedKeys.ZOMBIE_KEY.key())) {
+        LivingEntity boss = (LivingEntity) entity;
+        Collection<PotionEffect> effects = new ArrayList<>();
+        PotionEffect speed  = new PotionEffect(PotionEffectType.SPEED, 999999999, 2, false, false, false);
+        effects.add(speed);
+        PotionEffect fireResistance = new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 999999999, 255, false, false, false);
+        effects.add(fireResistance);
+        PotionEffect harm  = new PotionEffect(PotionEffectType.INSTANT_DAMAGE, 999999999, 255, false, false, false);
+        effects.add(harm);
+        boss.addPotionEffects(effects);
+      }
+    }
+  }
 
-    private void timerMessage(int seconds) {
-      String string = String.valueOf(seconds);
-      ZombieGame.this.party.members().forEach(target -> messageWithPrefix(target, gray("his game starts in ").append(aqua(string).append(gray(" seconds!")))));
+  @EventHandler
+  private void onUpdateBossBar(EntityDamageEvent event) {
+    //Get the entity of the event
+    var entity = event.getEntity();
+    //Checks if the entity type a zombie
+    if (entity.getType() == EntityType.ZOMBIE) {
+      //Checks if the boss is null, if it true ends this code
+      if (this.boss == null)return;
+      //Checks if the boss uuid the same of the saved uuid of this game
+      if (entity.getUniqueId() == this.boss.getUUID()) {
+        this.bossBar.update(this.boss);
+      }
+    }
+  }
+
+  private class GameBossBar {
+    /**
+     * This methode creates the Bossbar
+     * @param boss Requires the boss of the game
+     */
+    protected void create(@NotNull BossEntity boss){
+      //Create a new boss bar
+      BossBar bossbar = Bukkit.createBossBar("Test_BossBar_Zombie", BarColor.PINK, BarStyle.SEGMENTED_10);
+      //Add every player of the game party to the boss bar
+      ZombieGame.this.gameParty.members().forEach(bossbar::addPlayer);
+      //Divides the progress from the max value and the current value of life
+      double progress = boss.health() / boss.maxHealth();
+      //Set the progress
+      bossbar.setProgress(progress);
+      //Shows the boss bar
+      bossbar.setVisible(true);
+      //saves the bossbar in a map
+      ZombieGame.bossBossBar.put(boss, bossbar);
+    }
+
+    /**
+     * This methode updates the Bossbar
+     * @param boss Requires the boss of the game
+     */
+    protected void update(BossEntity boss) {
+      //Checks if the boss registerd in the map
+      if (ZombieGame.bossBossBar.containsKey(boss)) {
+        //Gets the boss bar of the map
+        BossBar bossBar = ZombieGame.bossBossBar.get(boss);
+        //Divides the progress from the max value and the current value of life
+        double progress = boss.health() / boss.maxHealth();
+        //Set the progress
+        bossBar.setProgress(progress);
+      }
+    }
+
+    /**
+     * This methode removes the Bossbar
+     * @param boss Requires the boss of the game
+     */
+    protected void remove(BossEntity boss) {
+      //Checks if the boss registerd in the map
+      if (ZombieGame.bossBossBar.containsKey(boss)) {
+        //Gets the boss bar of the map
+        BossBar bossBar = ZombieGame.bossBossBar.get(boss);
+        //Remove all players of the bossbar
+        bossBar.removeAll();
+        //Delete the bossbar of the map
+        ZombieGame.bossBossBar.remove(boss);
+      }
+    }
+  }
+
+  private class GameStartTimer extends TimerTasks {
+
+    /**
+     * Send a message to all players in the party
+     * @param seconds requires the time in seconds
+     */
+    private void timeMessage(int seconds) {
+      ZombieGame.this.gameParty.members().forEach(player -> message(player, gray("The game starts in ").append(darkPurple(String.valueOf(seconds))).append(gray("!"))));
     }
 
     @Override
-    public void start(int time, final @NotNull Player player, final Location location, final @NotNull Plugin plugin) {
-      new TimerUtils().countdownAndRun(time, new Runnable(){
-        @Override
+    public void start(int time, Player player, Location location, @NotNull Plugin plugin) {
+      //Create a new Countdown
+      (new TimerUtils()).countdownAndRun(time, new Runnable() {
         public void run() {
-          messageWithPrefix(player, gray("Your Bossfight starts!"));
+          //Send the information that's the countdown starts
+          ZombieGame.this.logger.logInfo("Start-Countdown started!");
+          ZombieGame.this.gameParty.members().forEach(partyPlayer -> message(partyPlayer, gray("The bossfight ").append(darkPurple("starts")).append(gray("!"))));
         }
       }, plugin);
-      new TimerUtils().countdownInterval(time, new TimeRunnable(){
-        @Override
+      (new TimerUtils()).countdownInterval(time, new TimerUtils.TimeRunnable() {
         public void run(int ticks) {
           if (ticks % 20 == 0) {
             int seconds = ticks / 20;
-            if (seconds == 100) {
-              GameStartTimer.this.timerMessage(seconds);
-            }
-            if (seconds == 80) {
-              GameStartTimer.this.timerMessage(seconds);
-            }
-            if (seconds == 60) {
-              GameStartTimer.this.timerMessage(seconds);
-            }
-            if (seconds == 40) {
-              GameStartTimer.this.timerMessage(seconds);
-            }
-            if (seconds == 30) {
-              GameStartTimer.this.timerMessage(seconds);
-            }
-            if (seconds == 20) {
-              GameStartTimer.this.timerMessage(seconds);
-            }
-            if (seconds == 15) {
-              GameStartTimer.this.timerMessage(seconds);
-            }
-            if (seconds == 10) {
-              GameStartTimer.this.timerMessage(seconds);
-              new BukkitRunnable(){
+            //Send a message if the time 100 secounds
+            if (seconds == 100)ZombieGame.GameStartTimer.this.timeMessage(seconds);
+            //Send a message if the time 80 secounds
+            if (seconds == 80)ZombieGame.GameStartTimer.this.timeMessage(seconds);
+            //Send a message if the time 60 secounds
+            if (seconds == 60)ZombieGame.GameStartTimer.this.timeMessage(seconds);
+            //Send a message if the time 40 secounds
+            if (seconds == 40)ZombieGame.GameStartTimer.this.timeMessage(seconds);
+            //Send a message if the time 30 secounds
+            if (seconds == 30)ZombieGame.GameStartTimer.this.timeMessage(seconds);
+            //Send a message if the time 20 secounds
+            if (seconds == 20)ZombieGame.GameStartTimer.this.timeMessage(seconds);
+            //Send a message if the time 15 secounds
+            if (seconds == 15)ZombieGame.GameStartTimer.this.timeMessage(seconds);
+            //Send a message if the time 10 secounds
+            if (seconds == 10){
+              ZombieGame.GameStartTimer.this.timeMessage(seconds);
+              new BukkitRunnable() {
                 @Override
                 public void run() {
-                  BossFightCreatorMain.bossFightCreator().bossFightCreatorLogger().logInfo("Teleporting all Players in the Arena.");
-                  messageWithPrefix(player,gray("You and your team will be teleported in the arena!"));
-                  ZombieGame.this.party.members().forEach(gamePlayer -> gamePlayer.teleport(location));
+                  //Send the teleport log
+                  ZombieGame.this.logger.logInfo("Teleport all players to Zombie-Game!");
+                  ZombieGame.this.gameParty.members().forEach(partyPlayer -> {
+                    //Send the teleport message and teleport the players to  the game
+                    message(partyPlayer, gray("You will be teleported to the arena"));
+                    partyPlayer.teleport(location);
+                  });
+
                 }
               }.runTask(plugin);
             }
-            if (seconds == 5) {
-              GameStartTimer.this.timerMessage(seconds);
-            }
-            if (seconds == 4) {
-              GameStartTimer.this.timerMessage(seconds);
-            }
-            if (seconds == 3) {
-              GameStartTimer.this.timerMessage(seconds);
-            }
-            if (seconds == 2) {
-              GameStartTimer.this.timerMessage(seconds);
-            }
-            if (seconds == 1) {
-              GameStartTimer.this.timerMessage(seconds);
-            }
+            //Send a message if the time 5 secounds
+            if (seconds == 5)ZombieGame.GameStartTimer.this.timeMessage(seconds);
+            //Send a message if the time 4 secounds
+            if (seconds == 4)ZombieGame.GameStartTimer.this.timeMessage(seconds);
+            //Send a message if the time 3 secounds
+            if (seconds == 3)ZombieGame.GameStartTimer.this.timeMessage(seconds);
+            //Send a message if the time 2 secounds
+            if (seconds == 2)ZombieGame.GameStartTimer.this.timeMessage(seconds);
+            //Send a message if the time 1 secounds
+            if (seconds == 1)ZombieGame.GameStartTimer.this.timeMessage(seconds);
           }
+
         }
-      }, new Runnable(){
-        @Override
+      }, new Runnable() {
         public void run() {
-          BossFightCreatorMain.bossFightCreator().bossFightCreatorLogger().logInfo("GameStartTimer was end!");
-          BossFightCreatorMain.bossFightCreator().bossFightCreatorLogger().logInfo("Game started!");
+          ZombieGame.this.logger.logInfo("Start-Countdown ended!");
+          ZombieGame.this.logger.logInfo("Start Fight...");
+          //Start the game
           ZombieGame.this.startGame();
         }
       }, plugin);
     }
+
   }
 
-  //This class creates a timer for the end of the game.
-  public class GameEndTimer extends TimerTasks {
+  private class GameEndTimer extends TimerTasks {
 
-    private void timerMessage(int seconds, Player target) {
-      String string = String.valueOf(seconds);
-      messageWithPrefix(target, gray("The game ends in ").append(aqua(string).append(gray(" seconds!"))));
+    /**
+     * Send a message to all players in the party
+     * @param seconds requires the time in seconds
+     */
+    private void timeMessage(int seconds) {
+      ZombieGame.this.gameParty.members().forEach(player -> message(player, gray("The game ends in ").append(darkPurple(String.valueOf(seconds))).append(gray("!"))));
     }
+
     @Override
-    public void start(int time, @NotNull Player player, final Location location, final @NotNull Plugin plugin) {
-      new TimerUtils().countdownAndRun(time, new Runnable(){
-        @Override
+    public void start(int time, Player player, Location location, @NotNull Plugin plugin) {
+      new TimerUtils().countdownAndRun(time, new Runnable() {
         public void run() {
-          if (!ZombieGame.this.isBossDie) {
-            ZombieGame.this.boss.kill();
-            ZombieGame.this.isBossDie = true;
+          if (!ZombieGame.this.bossDeath) {
+            ZombieGame.this.boss.remove(Entity.RemovalReason.KILLED);
+            ZombieGame.this.bossDeath = true;
           }
         }
       }, plugin);
-      new TimerUtils().countdownInterval(time, new TimeRunnable(){
+      (new TimerUtils()).countdownInterval(time, new TimerUtils.TimeRunnable() {
         public void run(int ticks) {
           if (ticks % 20 == 0) {
             int seconds = ticks / 20;
-            if (seconds == 60) {
-              GameEndTimer.this.timerMessage(seconds, player);
-            }
-            if (seconds == 30) {
-              GameEndTimer.this.timerMessage(seconds, player);
-            }
-            if (seconds == 20) {
-              GameEndTimer.this.timerMessage(seconds, player);
-            }
-            if (seconds == 10) {
-              GameEndTimer.this.timerMessage(seconds, player);
-            }
-            if (seconds == 5) {
-              GameEndTimer.this.timerMessage(seconds, player);
-            }
-            if (seconds == 3) {
-              GameEndTimer.this.timerMessage(seconds, player);
-            }
-            if (seconds == 2) {
-              GameEndTimer.this.timerMessage(seconds, player);
-            }
-            if (seconds == 1) {
-              GameEndTimer.this.timerMessage(seconds, player);
-            }
+            if (seconds == 60)GameEndTimer.this.timeMessage(seconds);
+            if (seconds == 30)GameEndTimer.this.timeMessage(seconds);
+            if (seconds == 20)GameEndTimer.this.timeMessage(seconds);
+            if (seconds == 10)GameEndTimer.this.timeMessage(seconds);
+            if (seconds == 5)GameEndTimer.this.timeMessage(seconds);
+            if (seconds == 3)GameEndTimer.this.timeMessage(seconds);
+            if (seconds == 2)GameEndTimer.this.timeMessage(seconds);
+            if (seconds == 1)GameEndTimer.this.timeMessage(seconds);
           }
         }
-      }, new Runnable(){
-        @Override
+      }, new Runnable() {
         public void run() {
-          new BukkitRunnable(){
+          new BukkitRunnable() {
             @Override
             public void run() {
-              ZombieGame.this.end(location);
+              ZombieGame.this.endGame(location);
             }
           }.runTask(plugin);
         }
       }, plugin);
     }
   }
+
+
 }

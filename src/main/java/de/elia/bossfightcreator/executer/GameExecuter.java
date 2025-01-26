@@ -7,10 +7,11 @@ import de.elia.api.thezepserapi.TheZepserAPI;
 
 import de.elia.bossfightcreator.BossFightCreatorMain;
 import de.elia.bossfightcreator.executer.game.creeper.CreeperGame;
-import de.elia.bossfightcreator.executer.game.zombie.ZombieGame;
 import de.elia.bossfightcreator.arena.Arena;
+import de.elia.bossfightcreator.executer.game.zombie.ZombieGame;
 import de.elia.party.Party;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -23,14 +24,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.sql.SQLException;
 import java.util.Optional;
 import java.util.Random;
 
 import static de.elia.achivementssystem.achievement.Achievement.giveAchievement;
 import static de.elia.api.achievements.Achievements.BOSSFIGHT_CREEPER;
 import static de.elia.api.achievements.Achievements.BOSSFIGHT_ZOMBIE;
-import static de.elia.api.logging.error.SaveError.saveError;
 import static de.elia.bossfightcreator.arena.ArenaMobType.CREEPER;
 import static de.elia.bossfightcreator.arena.ArenaMobType.ZOMBIE;
 import static de.elia.bossfightcreator.arena.ArenaState.USED;
@@ -135,7 +134,8 @@ public class GameExecuter implements Listener {
         logger.logInfo("Arena " + arena.getArenaID() + " is " + arena.getState() + "!");
         logger.logInfo("Start the new Game of " + player.getName());
         //Load the zombie game
-        this.game = new ZombieGame(arena, player, plugin, party);
+        //this.game = new OldZombieGame(arena, player, plugin, party);
+        this.game = new ZombieGame(BossFightCreatorMain.bossFightCreator().main(), arena, player, Bukkit.getWorld("world").getSpawnLocation(), party, "TEST-V.2.0-ZOMBIE_BOSS-dev");
         //Set to the arena a game
         arena.setGame(this.game);
         //log in the console
