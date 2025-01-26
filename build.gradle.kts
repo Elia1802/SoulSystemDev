@@ -2,7 +2,8 @@
 
 plugins {
   `java-library`
-  id("io.papermc.paperweight.userdev") version "1.7.3"
+  //id("io.papermc.paperweight.userdev") version "1.7.3"
+  id("io.papermc.paperweight.userdev") version "2.0.0-beta.14"
   id("xyz.jpenilla.run-paper") version "2.3.0" // Adds runServer and runMojangMappedServer tasks for testing
   //id("xyz.jpenilla.resource-factory-bukkit-convention") version "1.1.1" // Generates plugin.yml based on the Gradle config
 }
@@ -36,12 +37,12 @@ repositories {
 }
 
 dependencies {
-  paperweight.paperDevBundle("1.21.4-R0.1-20241205.222346-7")
+  paperweight.paperDevBundle("1.21.4-R0.1-SNAPSHOT")
   implementation(platform("com.intellectualsites.bom:bom-newest:1.37"))
   implementation("com.fastasyncworldedit:FastAsyncWorldEdit-Core:2.9.2")
   implementation("com.fastasyncworldedit:FastAsyncWorldEdit-Bukkit:2.9.2") { isTransitive = false }
   implementation("com.mysql:mysql-connector-j:9.1.0")
-  implementation("de.elia.api:SoulLibrary:4.0.0")
+  implementation("de.elia.api:SoulLibrary:5.0.0-dev")
   implementation("org.apache.logging.log4j:log4j-api:3.0.0-beta2")
   implementation("org.apache.logging.log4j:log4j-core:3.0.0-beta2")
   // paperweight.foliaDevBundle("1.21-R0.1-SNAPSHOT")
