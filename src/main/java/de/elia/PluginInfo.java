@@ -12,7 +12,7 @@ public class PluginInfo {
 
   public static class SoulLibrary {
     public static final String NAME = "SoulLibrary";
-    public static final String VERSION = "5.0.0-dev";
+    public static final String VERSION = "5.0.0";
   }
 
 }
