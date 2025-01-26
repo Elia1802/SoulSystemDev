@@ -1,6 +1,7 @@
 package de.elia.bossfightcreator.executer.game.creeper;
 
 import de.elia.api.achievements.Achievements;
+import de.elia.api.entities.BossEntity;
 import de.elia.api.entityRegion.EntityRegion;
 import de.elia.api.game.Game;
 import de.elia.api.logging.PluginLogger;
@@ -12,7 +13,6 @@ import de.elia.bossfightcreator.arena.Arena;
 import de.elia.bossfightcreator.arena.ArenaReBuilder;
 import de.elia.party.Party;
 import de.elia.soulboss.SoulBoss;
-import de.elia.soulboss.entitys.BossEntity;
 import de.elia.soulboss.entitys.creeper.CreeperBoss;
 import de.elia.soulboss.entitys.creeper.drop.Drops;
 import de.elia.soulboss.entitys.creeper.minis.MiniCreepers;
@@ -57,15 +57,12 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.Integer;
 import java.lang.Override;
 import java.lang.String;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
 import static de.elia.achivementssystem.achievement.Achievement.giveAchievement;
 import static de.elia.api.entityRegion.EntityRegionBuilder.containsEntity;
 import static de.elia.api.entityRegion.EntityRegionBuilder.createEntityRegionBorder;
-import static de.elia.api.messages.builder.MessageBuilder.aqua;
 import static de.elia.api.messages.builder.MessageBuilder.darkPurple;
 import static de.elia.api.messages.builder.MessageBuilder.gray;
 import static de.elia.api.messages.builder.MessageBuilder.message;
@@ -74,6 +71,7 @@ import static de.elia.bossfightcreator.BossFightCreatorMain.playerStatusMap;
 
 /**
  * This class processed the Creeper Bossfights
+ *
  * @author Elia
  * @since 3.0.0
  */
@@ -126,13 +124,14 @@ public class CreeperGame implements Game, Listener {
 
   /**
    * This creates a new Creeper game
-   * @param arena The arena for this game
-   * @param gameOwner The game owner for this game
-   * @param plugin The main instance
+   *
+   * @param arena         The arena for this game
+   * @param gameOwner     The game owner for this game
+   * @param plugin        The main instance
    * @param spawnLocation The spawn location for all entities
-   * @param gameParty The party for this game
+   * @param gameParty     The party for this game
    */
-  public CreeperGame(@NotNull Arena arena, @NotNull Player gameOwner, @NotNull JavaPlugin plugin, @NotNull Location spawnLocation, @NotNull Party gameParty){
+  public CreeperGame(@NotNull Arena arena, @NotNull Player gameOwner, @NotNull JavaPlugin plugin, @NotNull Location spawnLocation, @NotNull Party gameParty) {
     this.arena = arena;
     this.gameOwner = gameOwner;
     this.plugin = plugin;
@@ -147,7 +146,7 @@ public class CreeperGame implements Game, Listener {
     //Set the boss name
     bossName = "TEST";
     //Start the start timer for this game
-    new StartGameTimer().start(120*20, gameOwner, spawnLocation, plugin);
+    new StartGameTimer().start(120 * 20, gameOwner, spawnLocation, plugin);
   }
 
   /**
@@ -166,6 +165,7 @@ public class CreeperGame implements Game, Listener {
           public void die(@NotNull DamageSource damageSource) {
             CreeperGame.this.die(damageSource, CreeperGame.this.boss);
           }
+
           //Override explodeCreeper methode
           @Override
           public void explodeCreeper() {
@@ -174,19 +174,19 @@ public class CreeperGame implements Game, Listener {
         };
         //Set uuid
         bossUUID = CreeperGame.this.boss.getUUID();
-        //Creaté bossbar
+        //Create bossbar
         CreeperGame.this.bossBar.create(CreeperGame.this.boss);
       }
-    //Execute the runnable
+      //Execute the runnable
     }.runTask(this.plugin);
   }
 
   /**
    * This methode ends the game
    */
-  protected void endGame(){
+  protected void endGame() {
     //Create a runnable because this code can't be executing asynchron
-    new BukkitRunnable(){
+    new BukkitRunnable() {
       @Override
       public void run() {
         CreeperGame.this.logger.logInfo("Remove the game properties of all players and teleport this players back to World world...");
@@ -196,6 +196,8 @@ public class CreeperGame implements Game, Listener {
           player.teleport(mainSpawnLocation);
           //Reset the state of the player
           playerStatusMap().replace(player, 0);
+          //send Message
+          message(player, darkPurple("Thank you ").append(gray("for playing this ")).append(darkPurple("boss fight")).append(gray("! We hope you ")).append(darkPurple("enjoyed ")).append(gray("it!")));
         });
         CreeperGame.this.logger.logInfo("Properties removed!");
         CreeperGame.this.logger.logInfo("Remove party...");
@@ -215,23 +217,25 @@ public class CreeperGame implements Game, Listener {
 
   /**
    * This methode kills this game
-   * @param reason Required the reason
+   *
+   * @param reason    Required the reason
    * @param isRestart If not a restart, unload the game "normal"
    */
   @Override
-  public void kill(String reason, boolean isRestart){
+  public void kill(String reason, boolean isRestart) {
     killGame(reason, isRestart);
   }
 
   /**
    * This methode kills this game
-   * @param reason Required the reason
+   *
+   * @param reason    Required the reason
    * @param isRestart If not a restart, unload the game "normal"
    */
-  protected void killGame(String reason, boolean isRestart){
+  protected void killGame(String reason, boolean isRestart) {
     if (!isRestart) {
       //Create a runnable because this code can't be executing asynchron
-      new BukkitRunnable(){
+      new BukkitRunnable() {
         @Override
         public void run() {
           CreeperGame.this.logger.logInfo("Remove the game properties of all players and teleport this players back to World world...");
@@ -260,11 +264,12 @@ public class CreeperGame implements Game, Listener {
 
   /**
    * This methode executes the tasks if the creeper dies
+   *
    * @param damageSource The source of damamge because the boss dies
-   * @param entity Requires the boss
+   * @param entity       Requires the boss
    */
   public void die(@NotNull DamageSource damageSource, Creeper entity) {
-    if (CreeperGame.this.region == null){
+    if (CreeperGame.this.region == null) {
       //Generate a strike lightning effect on the death location of the boss
       entity.getBukkitEntity().getWorld().strikeLightningEffect(entity.getBukkitEntity().getLocation());
       //Give all players the achievement for killing the boss
@@ -278,8 +283,8 @@ public class CreeperGame implements Game, Listener {
       CreeperGame.this.logger.logInfo("End Game!");
       CreeperGame.this.logger.logInfo("Start game end timer!");
       //Start for every player in the party the end timer
-      CreeperGame.this.gameParty.members().forEach(player -> new EndGameTimer().start(60*20, player, CreeperGame.this.mainSpawnLocation, CreeperGame.this.plugin));
-    }else {
+      CreeperGame.this.gameParty.members().forEach(player -> new EndGameTimer().start(60 * 20, player, CreeperGame.this.mainSpawnLocation, CreeperGame.this.plugin));
+    } else {
       //Generate a strike lightning effect on the death location of the boss
       entity.getBukkitEntity().getWorld().strikeLightningEffect(entity.getBukkitEntity().getLocation());
       //Give all players the achievement for killing the boss
@@ -298,6 +303,7 @@ public class CreeperGame implements Game, Listener {
 
   /**
    * This methode executes the tasks if the creeper exploded
+   *
    * @param entity Required the {@link Creeper} boss
    */
   public void explodeCreeper(@NotNull Creeper entity) {
@@ -321,12 +327,13 @@ public class CreeperGame implements Game, Listener {
         //Remove of the old boss the bossbar
         CreeperGame.this.bossBar.remove(CreeperGame.this.boss);
         //Create a new Boss
-        CreeperBoss newBoss = new CreeperBoss(l, CreeperGame.this.bossName, newHealth, CreeperGame.this.bossUUID){
+        CreeperBoss newBoss = new CreeperBoss(l, CreeperGame.this.bossName, newHealth, CreeperGame.this.bossUUID) {
           //Override the die methode (for more details, check the called die methode)
           @Override
           public void die(@NotNull DamageSource damageSource) {
             CreeperGame.this.die(damageSource, CreeperGame.this.boss);
           }
+
           //Override the explodeCreeper methode (for more details, check the called explodeCreeper methode)
           @Override
           public void explodeCreeper() {
@@ -350,17 +357,19 @@ public class CreeperGame implements Game, Listener {
 
   /**
    * This methode starts the first attack of the creeper
-   * @param seconds The seconds how long the attack lasts
+   *
+   * @param seconds  The seconds how long the attack lasts
    * @param location The location for the attack
    */
-  protected void startAttack1(int seconds, Location location){
+  protected void startAttack1(int seconds, Location location) {
     //Create a timer
     new BukkitRunnable() {
       private int ticksElapsed = 0;
+
       @Override
       public void run() {
         //Checks if the time ends
-        if (ticksElapsed >= seconds){
+        if (ticksElapsed >= seconds) {
           //canceled this runnable
           this.cancel();
           //Reset elapsed ticks
@@ -383,7 +392,7 @@ public class CreeperGame implements Game, Listener {
   /**
    * This methode starts the second attack of the creeper
    */
-  public void startAttack2(){
+  public void startAttack2() {
     //Get every player in the game
     this.gameParty.members().forEach(player -> {
       //The location of the player
@@ -395,15 +404,16 @@ public class CreeperGame implements Game, Listener {
       //Spawned a new creeper for the player
       new MiniCreepers(playerLocation, creeperName);
       //Give the player blindness for 10 seconds
-      player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 10*20, 255, false, false, false));
+      player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 10 * 20, 255, false, false, false));
       //Create a random time (in seconds) until the message is sent by the mini creeper
       Random random = new Random();
       int x = random.nextInt(100, 180);
-      new BukkitRunnable(){
+      new BukkitRunnable() {
         private int y = 0;
+
         @Override
         public void run() {
-          if (y >= x){
+          if (y >= x) {
             //Send the player the message
             message(player, gray(creeperName + ": Im here..."));
             //Canceled this runnable
@@ -419,10 +429,11 @@ public class CreeperGame implements Game, Listener {
 
   /**
    * This Event kills the game if the party owner disconnects
+   *
    * @param event This event is called if a player disconnects the server
    */
   @EventHandler
-  private void onPlayerQuitServer(@NotNull PlayerQuitEvent event){
+  private void onPlayerQuitServer(@NotNull PlayerQuitEvent event) {
     //Get the player from the event
     Player player = event.getPlayer();
     //Checks if the player in the game
@@ -432,17 +443,18 @@ public class CreeperGame implements Game, Listener {
         //Killed the game
         this.killGame("Party Owner disconnected!", false);
         return;
-            //If the player in the party but not the owner, delete the player from the party
-      }else this.gameParty.removePlayer(player);
+        //If the player in the party but not the owner, delete the player from the party
+      } else this.gameParty.removePlayer(player);
     }
   }
 
   /**
    * This Event saves a location of the died player
+   *
    * @param event This event is called if a player died
    */
   @EventHandler
-  private void onPlayerDie(@NotNull PlayerDeathEvent event){
+  private void onPlayerDie(@NotNull PlayerDeathEvent event) {
     //Get the player from the event
     Player player = event.getPlayer();
     //Checks if the player in the game
@@ -450,8 +462,8 @@ public class CreeperGame implements Game, Listener {
       //Checks if the player the game owner
       if (player == this.gameOwner) {
         //Start the end timer of this game
-        new EndGameTimer().start(61*20, this.gameOwner, this.mainSpawnLocation, this.plugin);
-      }else {
+        new EndGameTimer().start(61 * 20, this.gameOwner, this.mainSpawnLocation, this.plugin);
+      } else {
         //Remove the player from the party
         this.gameParty.removePlayer(player);
       }
@@ -461,10 +473,11 @@ public class CreeperGame implements Game, Listener {
 
   /**
    * This event loads the attacks
+   *
    * @param event This event is called if an entity damaged another entity
    */
   @EventHandler
-  private void onInRegionAttack(@NotNull EntityDamageByEntityEvent event){
+  private void onInRegionAttack(@NotNull EntityDamageByEntityEvent event) {
     //Get the damaged entity
     Entity damagedEntity = event.getEntity();
     //Get the damager
@@ -472,11 +485,11 @@ public class CreeperGame implements Game, Listener {
     //Get the location of the damaged entity
     Location location = damagedEntity.getLocation();
     //Checks if the arrow saves attack active
-    if (isArrowSaveAttackOn);
+    if (isArrowSaveAttackOn) ;
     //Checks if the damager a projectile
-    if (damager instanceof Projectile projectile);
+    if (damager instanceof Projectile projectile) ;
     //Checks if the damaged entity the boss
-    if (damagedEntity.getPersistentDataContainer().has(NameSpacedKeys.CREEPER_KEY.key()));
+    if (damagedEntity.getPersistentDataContainer().has(NameSpacedKeys.CREEPER_KEY.key())) ;
     //Checks if the region contains the boss
     if (containsEntity(boss.getBukkitEntity(), savedLocation, this.radius)) {
       //cancel the event
@@ -487,11 +500,11 @@ public class CreeperGame implements Game, Listener {
     Random random = new Random();
     int randomNumber = random.nextInt(1, 100);
     //Checks if the number = or < then 10
-    if (randomNumber <= 10);
+    if (randomNumber <= 10) ;
     //Checks if an attack active
-    if (!this.ifAttackActive);
+    if (!this.ifAttackActive) ;
     //Checks if the damaged entity the boss
-    if (damagedEntity.getPersistentDataContainer().has(NameSpacedKeys.CREEPER_KEY.key()));
+    if (damagedEntity.getPersistentDataContainer().has(NameSpacedKeys.CREEPER_KEY.key())) ;
     //Checks if the damager a projectile
     if (damager instanceof Projectile projectile)
       //Checks if the arrow saves attack not active
@@ -512,10 +525,11 @@ public class CreeperGame implements Game, Listener {
 
   /**
    * This event loads the second attack
+   *
    * @param event This event is called if an entity damaged another entity
    */
   @EventHandler
-  private void onBossDamage(@NotNull EntityDamageByEntityEvent event){
+  private void onBossDamage(@NotNull EntityDamageByEntityEvent event) {
     //Get the boss
     Entity bossEntity = event.getEntity();
     //Get the damager
@@ -526,13 +540,13 @@ public class CreeperGame implements Game, Listener {
     //Checks if the damager a Player and create a variable of this Player
     if (damager instanceof Player pDamager) {
       //Checks if the player in the party
-      if (this.gameParty.members().contains(pDamager));
+      if (this.gameParty.members().contains(pDamager)) ;
       //Checks if the boss entity the boss creeper boss
-      if (bossEntity.getPersistentDataContainer().has(NameSpacedKeys.CREEPER_KEY.key()));
+      if (bossEntity.getPersistentDataContainer().has(NameSpacedKeys.CREEPER_KEY.key())) ;
       //Check if an attack not active
-      if (!this.ifAttackActive);
+      if (!this.ifAttackActive) ;
       //Check if the other attack active
-      if (!this.isMiniCreeperAttackOn);
+      if (!this.isMiniCreeperAttackOn) ;
       //Check if the random number smaller than 10
       if (randomAttackNumber < 10) {
         //Sets thats an attack used
@@ -546,6 +560,7 @@ public class CreeperGame implements Game, Listener {
         new BukkitRunnable() {
           //A variable of the elapsed time
           private int y = 0;
+
           @Override
           public void run() {
             //Checks if the elapsed time eqals or higher with than x
@@ -561,17 +576,17 @@ public class CreeperGame implements Game, Listener {
             //Count y by a tick higher
             y++;
           }
-        //Defines the runnable
+          //Defines the runnable
         }.runTaskTimer(this.plugin, 0, 1);
       }
-    //Checks if the damager a Projective and create a variable of this Projectile
-    }else if (damager instanceof Projectile projectile) {
+      //Checks if the damager a Projective and create a variable of this Projectile
+    } else if (damager instanceof Projectile projectile) {
       //Checks if the boss entity the boss creeper boss
-      if (bossEntity.getPersistentDataContainer().has(NameSpacedKeys.CREEPER_KEY.key()));
+      if (bossEntity.getPersistentDataContainer().has(NameSpacedKeys.CREEPER_KEY.key())) ;
       //Check if an attack not active
-      if (!this.ifAttackActive);
+      if (!this.ifAttackActive) ;
       //Check if the other attack active
-      if (!this.isMiniCreeperAttackOn);
+      if (!this.isMiniCreeperAttackOn) ;
       //Check if the random number smaller than 10
       if (randomAttackNumber < 30) {
         //Sets thats an attack used
@@ -585,6 +600,7 @@ public class CreeperGame implements Game, Listener {
         new BukkitRunnable() {
           //A variable of the elapsed time
           private int y = 0;
+
           @Override
           public void run() {
             //Checks if the elapsed time eqals or higher with than x
@@ -600,7 +616,7 @@ public class CreeperGame implements Game, Listener {
             //Count y by a tick higher
             y++;
           }
-        //Defines the runnable
+          //Defines the runnable
         }.runTaskTimer(this.plugin, 0, 1);
       }
     }
@@ -608,6 +624,7 @@ public class CreeperGame implements Game, Listener {
 
   /**
    * This event updates the Bossbar
+   *
    * @param event This event is called if an entity get damage
    */
   @EventHandler
@@ -617,7 +634,7 @@ public class CreeperGame implements Game, Listener {
     //Checks if the entity type a creeper
     if (entity.getType() == EntityType.CREEPER) {
       //Checks if the boss is null, if it true ends this code
-      if (CreeperGame.this.boss == null)return;
+      if (CreeperGame.this.boss == null) return;
       //Checks if the boss uuid the same of the saved uuid of this game
       if (CreeperGame.this.boss.getUUID() == this.bossUUID) {
         //Update the bossbar
@@ -631,7 +648,7 @@ public class CreeperGame implements Game, Listener {
    */
   private class GameBossBar {
 
-    private final Map<BossEntity, BossBar> bossBossBar = new HashMap<>();
+
 
     /**
      * This methode creates the Bossbar
@@ -649,7 +666,7 @@ public class CreeperGame implements Game, Listener {
       //Shows the boss bar
       bossBar.setVisible(true);
       //saves the bossbar in a map
-      this.bossBossBar.put(boss, bossBar);
+      CreeperGame.bossBossBar.put(boss, bossBar);
     }
 
     /**
@@ -658,9 +675,9 @@ public class CreeperGame implements Game, Listener {
      */
     protected void update(BossEntity boss) {
       //Checks if the boss registerd in the map
-      if (this.bossBossBar.containsKey(boss)) {
+      if (CreeperGame.bossBossBar.containsKey(boss)) {
         //Gets the boss bar of the map
-        BossBar bossBar = this.bossBossBar.get(boss);
+        BossBar bossBar = CreeperGame.bossBossBar.get(boss);
         //Divides the progress from the max value and the current value of life
         double progress = boss.health() / boss.maxHealth();
         //Set the progress
@@ -671,13 +688,13 @@ public class CreeperGame implements Game, Listener {
     //This methode removes the Bossbar
     protected void remove(BossEntity boss) {
       //Checks if the boss registerd in the map
-      if (this.bossBossBar.containsKey(boss)) {
+      if (CreeperGame.bossBossBar.containsKey(boss)) {
         //Gets the boss bar of the map
-        BossBar bossBar = this.bossBossBar.get(boss);
+        BossBar bossBar = CreeperGame.bossBossBar.get(boss);
         //Remove all players of the bossbar
         bossBar.removeAll();
         //Delete the bossbar of the map
-        this.bossBossBar.remove(boss);
+        CreeperGame.bossBossBar.remove(boss);
       }
     }
 
@@ -690,21 +707,23 @@ public class CreeperGame implements Game, Listener {
 
     /**
      * Send a message to every player in the game party
+     *
      * @param time Requires the time for the message
      */
-    private void timeMessage(int time){
-      CreeperGame.this.gameParty.members().forEach(partyPlayer -> message(partyPlayer, gray("This game starts in ").append(aqua(Integer.toString(time))).append(gray(" seconds!"))));
+    private void timeMessage(int time) {
+      CreeperGame.this.gameParty.members().forEach(partyPlayer -> message(partyPlayer, gray("This game starts in ").append(darkPurple(Integer.toString(time))).append(gray(" seconds!"))));
     }
 
     /**
      * Override the start methode
-     * @param time Requires the time in ticks
-     * @param player Requires a player
+     *
+     * @param time     Requires the time in ticks
+     * @param player   Requires a player
      * @param location A location that you need in the timer, but can be null
-     * @param plugin Requires the instance of the plugin
+     * @param plugin   Requires the instance of the plugin
      */
     @Override
-    public void start(int time, Player player,  Location location, @NotNull Plugin plugin) {
+    public void start(int time, Player player, Location location, @NotNull Plugin plugin) {
       //Create a new Countdown
       new TimerUtils().countdownAndRun(time, new Runnable() {
         @Override
@@ -722,19 +741,19 @@ public class CreeperGame implements Game, Listener {
             //Divide ticks by 20 to get the time in seconds
             int secounds = ticks / 20;
             //Send a message if the time 100 secounds
-            if (secounds == 100)CreeperGame.StartGameTimer.this.timeMessage(secounds);
+            if (secounds == 100) CreeperGame.StartGameTimer.this.timeMessage(secounds);
             //Send a message if the time 80 secounds
-            if (secounds == 80)CreeperGame.StartGameTimer.this.timeMessage(secounds);
+            if (secounds == 80) CreeperGame.StartGameTimer.this.timeMessage(secounds);
             //Send a message if the time 60 secounds
-            if (secounds == 60)CreeperGame.StartGameTimer.this.timeMessage(secounds);
+            if (secounds == 60) CreeperGame.StartGameTimer.this.timeMessage(secounds);
             //Send a message if the time 40 secounds
-            if (secounds == 40)CreeperGame.StartGameTimer.this.timeMessage(secounds);
+            if (secounds == 40) CreeperGame.StartGameTimer.this.timeMessage(secounds);
             //Send a message if the time 30 secounds
-            if (secounds == 30)CreeperGame.StartGameTimer.this.timeMessage(secounds);
+            if (secounds == 30) CreeperGame.StartGameTimer.this.timeMessage(secounds);
             //Send a message if the time 20 secounds
-            if (secounds == 20)CreeperGame.StartGameTimer.this.timeMessage(secounds);
+            if (secounds == 20) CreeperGame.StartGameTimer.this.timeMessage(secounds);
             //Send a message if the time 15 secounds
-            if (secounds == 15)CreeperGame.StartGameTimer.this.timeMessage(secounds);
+            if (secounds == 15) CreeperGame.StartGameTimer.this.timeMessage(secounds);
             //Checks if the time 10 secounds
             if (secounds == 10) {
               //Send a message
@@ -751,15 +770,15 @@ public class CreeperGame implements Game, Listener {
               }.runTask(plugin);
             }
             //Send a message if the time 5 secounds
-            if (secounds == 5)CreeperGame.StartGameTimer.this.timeMessage(secounds);
+            if (secounds == 5) CreeperGame.StartGameTimer.this.timeMessage(secounds);
             //Send a message if the time 4 secounds
-            if (secounds == 4)CreeperGame.StartGameTimer.this.timeMessage(secounds);
+            if (secounds == 4) CreeperGame.StartGameTimer.this.timeMessage(secounds);
             //Send a message if the time 3 secounds
-            if (secounds == 3)CreeperGame.StartGameTimer.this.timeMessage(secounds);
+            if (secounds == 3) CreeperGame.StartGameTimer.this.timeMessage(secounds);
             //Send a message if the time 2 secounds
-            if (secounds == 2)CreeperGame.StartGameTimer.this.timeMessage(secounds);
+            if (secounds == 2) CreeperGame.StartGameTimer.this.timeMessage(secounds);
             //Send a message if the time 1 secounds
-            if (secounds == 1)CreeperGame.StartGameTimer.this.timeMessage(secounds);
+            if (secounds == 1) CreeperGame.StartGameTimer.this.timeMessage(secounds);
           }
         }
       }, new Runnable() {
@@ -782,25 +801,27 @@ public class CreeperGame implements Game, Listener {
 
     /**
      * Send a message to every player in the game party
+     *
      * @param time Requires the time for the message
      */
-    private void timeMessage(int time){
-      CreeperGame.this.gameParty.members().forEach(gamePlayer -> message(gamePlayer, gray("The game ends in ").append(aqua(Integer.toString(time))).append(gray(" seconds!"))));
+    private void timeMessage(int time) {
+      CreeperGame.this.gameParty.members().forEach(gamePlayer -> message(gamePlayer, gray("The game ends in ").append(darkPurple(Integer.toString(time))).append(gray(" seconds!"))));
     }
 
     /**
      * Override the start methode
-     * @param time Requires the time in ticks
-     * @param player Requires a player
+     *
+     * @param time     Requires the time in ticks
+     * @param player   Requires a player
      * @param location A location that you need in the timer, but can be null
-     * @param plugin Requires the instance of the plugin
+     * @param plugin   Requires the instance of the plugin
      */
     @Override
     public void start(int time, Player player, Location location, @NotNull Plugin plugin) {
       new TimerUtils().countdownAndRun(time, new Runnable() {
         @Override
         public void run() {
-          new BukkitRunnable(){
+          new BukkitRunnable() {
             @Override
             public void run() {
               //Checks if the boss not dead
@@ -820,29 +841,29 @@ public class CreeperGame implements Game, Listener {
           if (ticks % 20 == 0) {
             int secounds = ticks / 20;
             //Send a message if the time 60 secounds
-            if (secounds == 60)CreeperGame.EndGameTimer.this.timeMessage(secounds);
+            if (secounds == 60) CreeperGame.EndGameTimer.this.timeMessage(secounds);
             //Send a message if the time 50 secounds
-            if (secounds == 50)CreeperGame.EndGameTimer.this.timeMessage(secounds);
+            if (secounds == 50) CreeperGame.EndGameTimer.this.timeMessage(secounds);
             //Send a message if the time 30 secounds
-            if (secounds == 30)CreeperGame.EndGameTimer.this.timeMessage(secounds);
+            if (secounds == 30) CreeperGame.EndGameTimer.this.timeMessage(secounds);
             //Send a message if the time 20 secounds
-            if (secounds == 20)CreeperGame.EndGameTimer.this.timeMessage(secounds);
+            if (secounds == 20) CreeperGame.EndGameTimer.this.timeMessage(secounds);
             //Send a message if the time 10 secounds
-            if (secounds == 10)CreeperGame.EndGameTimer.this.timeMessage(secounds);
+            if (secounds == 10) CreeperGame.EndGameTimer.this.timeMessage(secounds);
             //Send a message if the time 5 secounds
-            if (secounds == 5)CreeperGame.EndGameTimer.this.timeMessage(secounds);
+            if (secounds == 5) CreeperGame.EndGameTimer.this.timeMessage(secounds);
             //Send a message if the time 3 secounds
-            if (secounds == 3)CreeperGame.EndGameTimer.this.timeMessage(secounds);
+            if (secounds == 3) CreeperGame.EndGameTimer.this.timeMessage(secounds);
             //Send a message if the time 2 secounds
-            if (secounds == 2)CreeperGame.EndGameTimer.this.timeMessage(secounds);
+            if (secounds == 2) CreeperGame.EndGameTimer.this.timeMessage(secounds);
             //Send a message if the time 1 secounds
-            if (secounds == 1)CreeperGame.EndGameTimer.this.timeMessage(secounds);
+            if (secounds == 1) CreeperGame.EndGameTimer.this.timeMessage(secounds);
           }
         }
 
       }, new Runnable() {
         @Override
-        public void run(){
+        public void run() {
           //Ends the game
           CreeperGame.this.endGame();
         }
