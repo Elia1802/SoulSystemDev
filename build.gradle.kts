@@ -41,8 +41,8 @@ dependencies {
   implementation(platform("com.intellectualsites.bom:bom-newest:1.37"))
   implementation("com.fastasyncworldedit:FastAsyncWorldEdit-Core:2.9.2")
   implementation("com.fastasyncworldedit:FastAsyncWorldEdit-Bukkit:2.9.2") { isTransitive = false }
-  implementation("com.mysql:mysql-connector-j:9.1.0")
-  implementation("de.elia.api:SoulLibrary:5.0.0-dev")
+  implementation("com.mysql:mysql-connector-j:9.2.0")
+  implementation("de.elia.api:SoulLibrary:5.0.0")
   implementation("org.apache.logging.log4j:log4j-api:3.0.0-beta2")
   implementation("org.apache.logging.log4j:log4j-core:3.0.0-beta2")
   // paperweight.foliaDevBundle("1.21-R0.1-SNAPSHOT")
