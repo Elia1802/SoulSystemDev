@@ -2,7 +2,7 @@ package de.elia.party;
 
 import de.elia.Main;
 import de.elia.api.loader.SoulPlugin;
-import de.elia.api.loader.exceptions.SoulPluginLoadException;
+import de.elia.api.loader.exceptions.SoulPluginException;
 
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -14,13 +14,13 @@ public class PartyMain implements SoulPlugin {
 
   //This methode loads this plugin.
   @Override
-  public void enable(@NotNull JavaPlugin javaPlugin) throws SoulPluginLoadException {
+  public void enable(@NotNull JavaPlugin javaPlugin) {
     partyMain = this;
   }
 
   //This methode unloads this plugin.
   @Override
-  public void disable(@NotNull JavaPlugin javaPlugin) throws SoulPluginLoadException {
+  public void disable(@NotNull JavaPlugin javaPlugin) {
 
   }
 

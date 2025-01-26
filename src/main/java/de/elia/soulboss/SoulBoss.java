@@ -2,7 +2,7 @@ package de.elia.soulboss;
 
 import de.elia.Main;
 import de.elia.api.loader.SoulPlugin;
-import de.elia.api.loader.exceptions.SoulPluginLoadException;
+import de.elia.api.loader.exceptions.SoulPluginException;
 import de.elia.api.logging.PluginLogger;
 
 import de.elia.systemclasses.register.utils.UtilsLoader;
@@ -21,7 +21,7 @@ public class SoulBoss implements SoulPlugin {
   private static SoulBoss soulboss;
 
   //This methode loads this plugin.
-  public void enable(@NotNull JavaPlugin javaPlugin) throws SoulPluginLoadException {
+  public void enable(@NotNull JavaPlugin javaPlugin) {
     this.soulBossLogger().logInfo("Load SoulBoss...");
     soulboss = this;
     this.soulBossLogger().logInfo("Load utils...");
@@ -31,7 +31,7 @@ public class SoulBoss implements SoulPlugin {
   }
 
   //This methode unloads this plugin.
-  public void disable(@NotNull JavaPlugin javaPlugin) throws SoulPluginLoadException {
+  public void disable(@NotNull JavaPlugin javaPlugin) {
     Bukkit.getServer().getWorld("world_bossfight").getEntities().forEach(entity -> {
       if (entity.getType() == EntityType.ZOMBIE) {
         if (entity.getPersistentDataContainer().has(NameSpacedKeys.ZOMBIE_KEY.key())) {

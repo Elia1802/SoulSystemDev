@@ -4,7 +4,6 @@ import de.elia.achivementssystem.achievement.Achievement;
 import de.elia.api.Initialize;
 import de.elia.api.annotation.AnnotationChecker;
 import de.elia.api.configuration.SoulConfiguration;
-import de.elia.api.loader.exceptions.SoulPluginLoadException;
 
 import de.elia.bossfightcreator.arena.ArenaHandler;
 import de.elia.bossfightcreator.world.WorldMain;
@@ -82,18 +81,9 @@ public class Main extends JavaPlugin {
 
     MAIN_LOGGER.logInfo("Try to load Achievements, TheZepserAPI, BossFightCreator, Items, SoulBoss and SoulBossSystem...");
 
-    try {
-      MAIN_LOGGER.logInfo("Load Achievements plugin...");
-      ACHIEVEMENT_MAIN.enable(this);
-      MAIN_LOGGER.logInfo("Achievements plugin loaded!");
-    } catch (SoulPluginLoadException exception) {
-      MAIN_LOGGER.logError("An error occurred while loading Achievements plugin! (See Stacktrace)");
-      saveError(this, exception, "Main-onEnable-Create_an_error_by_loading_Achievements=SoulPluginLoadException");
-      MAIN_LOGGER.stacktrace(exception);
-      MAIN_LOGGER.logWarning("Disable SoulBossSystem");
-      this.disable();
-      return;
-    }
+    MAIN_LOGGER.logInfo("Load Achievements plugin...");
+    ACHIEVEMENT_MAIN.enable(this);
+    MAIN_LOGGER.logInfo("Achievements plugin loaded!");
 
     MAIN_LOGGER.logInfo("Load Item...");
     ITEM_MAIN.enable(this);
@@ -103,42 +93,17 @@ public class Main extends JavaPlugin {
     BOSS_FIGHT_CREATOR.enable(this);
     MAIN_LOGGER.logInfo("BossFightCreator loaded!");
 
-    try {
-      MAIN_LOGGER.logInfo("Load SoulBoss...");
-      SOUL_BOSS.enable(this);
-      MAIN_LOGGER.logInfo("SoulBoss loaded!");
-    } catch (SoulPluginLoadException exception) {
-      saveError(this, exception, "Main-onEnable-Create_an_error_by_loading_SoulBoss=SoulPluginLoadException");
-      MAIN_LOGGER.logError("An error occurred while loading SoulBoss plugin! (See Stacktrace)");
-      MAIN_LOGGER.stacktrace(exception);
-      MAIN_LOGGER.logWarning("Disable SoulBossSystem");
-      this.disable();
-      return;
-    }
+    MAIN_LOGGER.logInfo("Load SoulBoss...");
+    SOUL_BOSS.enable(this);
+    MAIN_LOGGER.logInfo("SoulBoss loaded!");
 
-    try {
-      MAIN_LOGGER.logInfo("Load SoulBossSystem...");
-      SOUL_BOSS_SYSTEM.enable(this);
-      MAIN_LOGGER.logInfo("SoulBossSystem loaded!");
-    } catch (SoulPluginLoadException exception) {
-      saveError(this, exception, "Main-onEnable-Create_an_error_by_loading_SoulBossSystem=SoulPluginLoadException");
-      MAIN_LOGGER.logError("An error occurred while loading SoulBossSystem plugin! (See Stacktrace)");
-      MAIN_LOGGER.stacktrace(exception);
-      MAIN_LOGGER.logWarning("Disable SoulBossSystem");
-      this.disable();
-      return;
-    }
+    MAIN_LOGGER.logInfo("Load SoulBossSystem...");
+    SOUL_BOSS_SYSTEM.enable(this);
+    MAIN_LOGGER.logInfo("SoulBossSystem loaded!");
 
-    try {
-      MAIN_LOGGER.logInfo("Unload Party...");
-      PARTY_MAIN.disable(this);
-      MAIN_LOGGER.logInfo("Party unloaded!");
-    }catch (SoulPluginLoadException exception) {
-      saveError(this, exception, "Main-onEnable-Create_an_error_by_loading_Party=SoulPluginLoadException");
-      MAIN_LOGGER.stacktrace(exception);
-      MAIN_LOGGER.logWarning("Disable SoulBossSystem");
-      this.disable();
-    }
+    MAIN_LOGGER.logInfo("Unload Party...");
+    PARTY_MAIN.disable(this);
+    MAIN_LOGGER.logInfo("Party unloaded!");
 
     MAIN_LOGGER.logInfo("Achievements, TheZepserAPI, BossFightCreator, Items, SoulBoss, Party and SoulBossSystem loaded!");
     try {
@@ -152,16 +117,7 @@ public class Main extends JavaPlugin {
       return;
     }
 
-    try {
-      registerListener();
-    } catch (Exception exception) {
-      MAIN_LOGGER.logError("An error occurred while loading Events (See Stacktrace)");
-      saveError(this, exception, "Main-onEnable-Create_an_error_by_loading_Listener=Exception");
-      MAIN_LOGGER.stacktrace(exception);
-      MAIN_LOGGER.logWarning("Disable SoulBossSystem");
-      this.disable();
-      return;
-    }
+    registerListener();
 
     if (getInstance().getPlatformManager().isInitialized()) {
       isWorldEditReady = true;
@@ -202,16 +158,9 @@ public class Main extends JavaPlugin {
       MAIN_LOGGER.logInfo(getPluginManager().getPlugin("SoulLibrary").getName() + " and " + getPluginManager().getPlugin("WorldEdit").getName() + "is loaded!");
       MAIN_LOGGER.logInfo("Try to unload Achievements, TheZepserAPI, BossFightCreator, Items, SoulBoss, Party and SoulBossSystem...");
 
-      try {
-        MAIN_LOGGER.logInfo("Unload achievement plugin...");
-        ACHIEVEMENT_MAIN.disable(this);
-        MAIN_LOGGER.logInfo("Achievement plugin unloaded!");
-      } catch (SoulPluginLoadException exception) {
-        saveError(this, exception, "Main-onDisable-An_error_occurred_by_unloading_Achievement=SoulPluginLoadException");
-        MAIN_LOGGER.logError("An error occurred while disabling achievement plugin! (See Stacktrace)");
-        MAIN_LOGGER.stacktrace(exception);
-        MAIN_LOGGER.logWarning("de.elia.Main not corect stopped!");
-      }
+      MAIN_LOGGER.logInfo("Unload achievement plugin...");
+      ACHIEVEMENT_MAIN.disable(this);
+      MAIN_LOGGER.logInfo("Achievement plugin unloaded!");
 
       MAIN_LOGGER.logInfo("Unload BossFightCreator...");
       BOSS_FIGHT_CREATOR.disable(this);
@@ -221,38 +170,17 @@ public class Main extends JavaPlugin {
       ITEM_MAIN.disable(this);
       MAIN_LOGGER.logInfo("Item unloaded!");
 
-      try {
-        MAIN_LOGGER.logInfo("Unload SoulBoss...");
-        SOUL_BOSS.disable(this);
-        MAIN_LOGGER.logInfo("SoulBoss unloaded!");
-      } catch (SoulPluginLoadException exception) {
-        saveError(this, exception, "Main-onDisable-An_error_occurred_by_unloading_SoulBoss=SoulPluginException");
-        MAIN_LOGGER.logError("An error occurred while disabling SoulBoss! (See Stacktrace)");
-        MAIN_LOGGER.stacktrace(exception);
-        MAIN_LOGGER.logWarning("de.elia.Main not corect stopped!");
-      }
+      MAIN_LOGGER.logInfo("Unload SoulBoss...");
+      SOUL_BOSS.disable(this);
+      MAIN_LOGGER.logInfo("SoulBoss unloaded!");
 
-      try {
-        MAIN_LOGGER.logInfo("Unload Party...");
-        PARTY_MAIN.disable(this);
-        MAIN_LOGGER.logInfo("Party unloaded!");
-      }catch (SoulPluginLoadException exception) {
-        saveError(this, exception, "Main-onEnable-An_error_occurred_by_unloading_Party=SoulPluginLoadException");
-        MAIN_LOGGER.stacktrace(exception);
-        MAIN_LOGGER.logWarning("Disable SoulBossSystem");
-        this.disable();
-      }
+      MAIN_LOGGER.logInfo("Unload Party...");
+      PARTY_MAIN.disable(this);
+      MAIN_LOGGER.logInfo("Party unloaded!");
 
-      try {
-        MAIN_LOGGER.logInfo("Unload SoulBossSystem...");
-        SOUL_BOSS_SYSTEM.disable(this);
-        MAIN_LOGGER.logInfo("SoulBossSystem unloaded!");
-      } catch (SoulPluginLoadException exception) {
-        saveError(this, exception, "Main-onDisable-An_error_occurred_by_unloading_SoulBossSystem=SoulPluginLoadException");
-        MAIN_LOGGER.logError("An error occurred while disabling SoulBossSystem! (See Stacktrace)");
-        MAIN_LOGGER.stacktrace(exception);
-        MAIN_LOGGER.logWarning("de.elia.Main not corect stopped!");
-      }
+      MAIN_LOGGER.logInfo("Unload SoulBossSystem...");
+      SOUL_BOSS_SYSTEM.disable(this);
+      MAIN_LOGGER.logInfo("SoulBossSystem unloaded!");
 
       MAIN_LOGGER.logInfo("Achievements, TheZepserAPI, BossFightCreator, Items, SoulBoss, Party and SoulBossSystem unloaded!");
       MAIN_LOGGER.logInfo("de.elia.Main stopped!");

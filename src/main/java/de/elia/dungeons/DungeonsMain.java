@@ -2,7 +2,7 @@ package de.elia.dungeons;
 
 import de.elia.Main;
 import de.elia.api.loader.SoulPlugin;
-import de.elia.api.loader.exceptions.SoulPluginLoadException;
+import de.elia.api.loader.exceptions.SoulPluginException;
 import de.elia.api.logging.PluginLogger;
 import de.elia.systemclasses.Instances;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -13,12 +13,12 @@ public class DungeonsMain implements SoulPlugin {
   private static DungeonsMain dungeonsMain;
 
   @Override
-  public void enable(@NotNull JavaPlugin javaPlugin) throws SoulPluginLoadException {
+  public void enable(@NotNull JavaPlugin javaPlugin) {
     dungeonsMain = this;
   }
 
   @Override
-  public void disable(@NotNull JavaPlugin javaPlugin) throws SoulPluginLoadException {
+  public void disable(@NotNull JavaPlugin javaPlugin) {
     //...
   }
 

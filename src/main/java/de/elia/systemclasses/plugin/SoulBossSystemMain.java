@@ -2,7 +2,7 @@ package de.elia.systemclasses.plugin;
 
 import de.elia.Main;
 import de.elia.api.loader.SoulPlugin;
-import de.elia.api.loader.exceptions.SoulPluginLoadException;
+import de.elia.api.loader.exceptions.SoulPluginException;
 import de.elia.api.logging.PluginLogger;
 
 import de.elia.systemclasses.plugin.configuation.SoulBossSystemConfigurationLoader;
@@ -18,7 +18,7 @@ public class SoulBossSystemMain implements SoulPlugin {
   private static SoulBossSystemMain soulBossSystemMain;
 
   //This methode loads this plugin.
-  public void enable(@NotNull JavaPlugin javaPlugin) throws SoulPluginLoadException {
+  public void enable(@NotNull JavaPlugin javaPlugin) {
     soulBossSystemMain = this;
     this.soulBossSystemLogger().logInfo("Load SoulBossSystem plugin...");
     this.soulBossSystemLogger().logInfo("Load files...");
@@ -28,7 +28,7 @@ public class SoulBossSystemMain implements SoulPlugin {
   }
 
   //Gets the logger for this plugin.
-  public void disable(@NotNull JavaPlugin javaPlugin) throws SoulPluginLoadException {
+  public void disable(@NotNull JavaPlugin javaPlugin) {
     SoulBossSystemConfigurationLoader.save(javaPlugin);
   }
 

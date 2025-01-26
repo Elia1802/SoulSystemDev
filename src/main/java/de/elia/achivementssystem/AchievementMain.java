@@ -2,7 +2,7 @@ package de.elia.achivementssystem;
 
 import de.elia.Main;
 import de.elia.api.loader.SoulPlugin;
-import de.elia.api.loader.exceptions.SoulPluginLoadException;
+import de.elia.api.loader.exceptions.SoulPluginException;
 import de.elia.api.logging.PluginLogger;
 import de.elia.systemclasses.Instances;
 
@@ -26,10 +26,9 @@ public class AchievementMain implements SoulPlugin {
   /**
    * Load the Achievement Plugin
    * @param javaPlugin Requires the main class of the system
-   * @throws SoulPluginLoadException If an error by loading the plugin, creates a stacktrace
    */
   @Override
-  public void enable(@NotNull JavaPlugin javaPlugin) throws SoulPluginLoadException {
+  public void enable(@NotNull JavaPlugin javaPlugin) {
     this.achievementPluginLogger().logInfo("Load Achievement plugin...");
     achievementMain = this;
     try {
@@ -44,10 +43,9 @@ public class AchievementMain implements SoulPlugin {
   /**
    * Unload the Achievement Plugin
    * @param javaPlugin Requires the main class of the system
-   * @throws SoulPluginLoadException If an error by unloading the plugin, creates a stacktrace
    */
   @Override
-  public void disable(@NotNull JavaPlugin javaPlugin) throws SoulPluginLoadException {
+  public void disable(@NotNull JavaPlugin javaPlugin) {
     try {
       if (!achievementDataBase.connection().isClosed()) {
         achievementDataBase.connection().close();
