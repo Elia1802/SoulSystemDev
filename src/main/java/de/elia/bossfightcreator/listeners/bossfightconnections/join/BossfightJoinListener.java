@@ -1,6 +1,6 @@
 package de.elia.bossfightcreator.listeners.bossfightconnections.join;
 
-import de.elia.api.events.bossfight.connections.join.BossFightJoinEvent;
+import de.elia.api.game.party.connections.join.BossFightJoinEvent;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

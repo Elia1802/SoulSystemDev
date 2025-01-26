@@ -1,8 +1,8 @@
 package de.elia.party;
 
 import de.elia.Main;
-import de.elia.api.events.bossfight.connections.join.BossFightJoinEvent;
-import de.elia.api.events.bossfight.connections.quit.BossFightQuitEvent;
+import de.elia.api.game.party.connections.join.BossFightJoinEvent;
+import de.elia.api.game.party.connections.quit.BossFightQuitEvent;
 
 import de.elia.party.utils.PartyUtils;
 

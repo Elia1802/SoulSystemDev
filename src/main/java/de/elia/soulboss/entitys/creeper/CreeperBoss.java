@@ -1,6 +1,6 @@
 package de.elia.soulboss.entitys.creeper;
 
-import de.elia.soulboss.entitys.BossEntity;
+import de.elia.api.entities.BossEntity;
 import de.elia.systemclasses.keys.NameSpacedKeys;
 
 import net.minecraft.network.chat.Component;

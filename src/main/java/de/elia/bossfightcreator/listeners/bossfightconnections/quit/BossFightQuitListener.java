@@ -1,6 +1,6 @@
 package de.elia.bossfightcreator.listeners.bossfightconnections.quit;
 
-import de.elia.api.events.bossfight.connections.quit.BossFightQuitEvent;
+import de.elia.api.game.party.connections.quit.BossFightQuitEvent;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
