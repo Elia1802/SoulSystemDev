@@ -56,7 +56,7 @@ public class AchievementDataBase implements AchievementDB {
   private final DataSource dataSource = this.newDataSource();
 
   public void loadDatabase() throws SQLException {
-    if (this.version != 1) {
+    if (this.version == 1) {
       Connection connection = this.dataSource.getConnection();
       PreparedStatement statement =
               connection.prepareStatement("CREATE TABLE " + this.table + "(uuid VARCHAR(50) PRIMARY KEY, achievement_id VARCHAR(50))");
