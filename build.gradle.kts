@@ -38,7 +38,7 @@ repositories {
 }
 
 dependencies {
-  paperweight.paperDevBundle("1.21.4-R0.1-SNAPSHOT")
+  paperweight.paperDevBundle("1.21.5-R0.1-SNAPSHOT")
   implementation(platform("com.intellectualsites.bom:bom-newest:1.37"))
   implementation("com.fastasyncworldedit:FastAsyncWorldEdit-Core:2.9.2")
   implementation(platform("com.intellectualsites.bom:bom-newest:1.52")) // Ref: https://github.com/IntellectualSites/bom
@@ -67,7 +67,7 @@ tasks {
   /*
   reobfJar {
     // This is an example of how you might change the output location for reobfJar. It's recommended not to do this
-    // for a variety of reasons, however it's asked frequently enough that an example of how to do it is included here.
+    // for a variety of reasons, however, it's asked frequently enough that an example of how to do it is included here.
     outputJar = layout.buildDirectory.file("libs/PaperweightTestPlugin-${project.version}.jar")
   }
    */
