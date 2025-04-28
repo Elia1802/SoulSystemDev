@@ -1,15 +1,12 @@
 package de.elia;
 
-import de.elia.achivementssystem.achievement.Achievement;
 import de.elia.api.Initialize;
-import de.elia.api.annotation.AnnotationChecker;
 import de.elia.api.configuration.SoulConfiguration;
 
 import de.elia.bossfightcreator.arena.ArenaHandler;
 import de.elia.bossfightcreator.world.WorldMain;
 import de.elia.bossfightcreator.world.CustomChunkGenerator;
 
-import de.elia.systemclasses.database.AchievementDataBase;
 import org.bukkit.Bukkit;
 import org.bukkit.GameRule;
 import org.bukkit.World;
@@ -20,10 +17,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import static de.elia.Loader.BETA_CLASSES;
 import static de.elia.systemclasses.Instances.ACHIEVEMENT_MAIN;
 import static de.elia.systemclasses.Instances.BOSS_FIGHT_CREATOR;
 import static de.elia.systemclasses.Instances.ITEM_MAIN;
@@ -70,14 +63,6 @@ public class Main extends JavaPlugin {
     }
     Initialize.init(getPluginManager(),this);
     MAIN_LOGGER.logInfo("SoulLibrary is loaded!");
-
-    Map<String, String> achievementClazzInformation = new HashMap<>();
-    achievementClazzInformation.put("Achievement", "SoulBossSystem");
-    BETA_CLASSES.put(Achievement.class, achievementClazzInformation);
-    Map<String, String> achievementDataBaseClazzInformation = new HashMap<>();
-    achievementDataBaseClazzInformation.put("AchievementDataBase", "SoulBossSystem");
-    BETA_CLASSES.put(AchievementDataBase.class, achievementDataBaseClazzInformation);
-    BETA_CLASSES.forEach((clazz, clazzInformationMap) -> clazzInformationMap.forEach((name, plugin) -> AnnotationChecker.processAnnotations(clazz, name, plugin)));
 
     MAIN_LOGGER.logInfo("Try to load Achievements, TheZepserAPI, BossFightCreator, Items, SoulBoss and SoulBossSystem...");
 
