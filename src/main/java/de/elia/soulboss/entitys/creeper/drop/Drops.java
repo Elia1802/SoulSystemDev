@@ -29,6 +29,7 @@ public class Drops {
     this.drop(gameOwner, creeperBoss, dropLocation, random, itemNumber);
   }
 
+  //TODO: CREATE CHEST FOR EVERY PLAYER WITH THE SAME LOOT!!!!
   private void drop(@NotNull Player gameOwner, @NotNull Entity creeperBoss, @NotNull Location dropLocation, @NotNull Random random, int itemNumber) {
     var logger = BossFightCreatorMain.bossFightCreator().bossFightCreatorLogger();
     int amount = random.nextInt(3, 11);
