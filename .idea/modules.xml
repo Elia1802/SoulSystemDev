@@ -2,14 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Code.SoulSystemDev.SoulBossSystem-Dev.main.iml" filepath="$PROJECT_DIR$/.idea/modules/Code.SoulSystemDev.SoulBossSystem-Dev.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Code.SoulSystemDev.SoulBossSystem-Dev.test.iml" filepath="$PROJECT_DIR$/.idea/modules/Code.SoulSystemDev.SoulBossSystem-Dev.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/SoulBossSystem-Dev.main.iml" filepath="$PROJECT_DIR$/.idea/modules/SoulBossSystem-Dev.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/SoulBossSystem-Dev.test.iml" filepath="$PROJECT_DIR$/.idea/modules/SoulBossSystem-Dev.test.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/SoulSystemDev.SoulBossSystem-Dev.main.iml" filepath="$PROJECT_DIR$/.idea/modules/SoulSystemDev.SoulBossSystem-Dev.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/SoulSystemDev.SoulBossSystem-Dev.test.iml" filepath="$PROJECT_DIR$/.idea/modules/SoulSystemDev.SoulBossSystem-Dev.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/de.elia.SoulBossSystem-Dev.main.iml" filepath="$PROJECT_DIR$/.idea/modules/de.elia.SoulBossSystem-Dev.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/de.elia.SoulBossSystem-Dev.test.iml" filepath="$PROJECT_DIR$/.idea/modules/de.elia.SoulBossSystem-Dev.test.iml" />
     </modules>
   </component>
 </project>
