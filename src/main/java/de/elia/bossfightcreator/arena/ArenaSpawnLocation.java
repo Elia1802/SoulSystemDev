@@ -63,64 +63,64 @@ public class ArenaSpawnLocation {
     if (ARENA_IDs.contains(arenaID)) {
       switch (arenaID) {
         case "arena_1.0" -> {
-          return new Location(Bukkit.getWorld("world_bossfight"), 117.0, 21.0, 259.0);
+          return new Location(Bukkit.getWorld("world_bossfight"), -4.0, 101.0, 213.0);
         }
         case "arena_1.1" -> {
-          return new Location(Bukkit.getWorld("world_bossfight"), 317.0, 21.0, 259.0);
+          return new Location(Bukkit.getWorld("world_bossfight"), 196.0, 101.0, 213.0);
         }
         case "arena_1.2" -> {
-          return new Location(Bukkit.getWorld("world_bossfight"), 517.0, 21.0, 259.0);
+          return new Location(Bukkit.getWorld("world_bossfight"), 396.0, 101.0, 213.0);
         }
         case "arena_1.3" -> {
-          return new Location(Bukkit.getWorld("world_bossfight"), 158.0, 21.0, 259.0);
+          return new Location(Bukkit.getWorld("world_bossfight"), 596.0, 101.0, 213.0);
         }
         case "arena_1.4" -> {
-          return new Location(Bukkit.getWorld("world_bossfight"), 208.0, 21.0, 259.0);
+          return new Location(Bukkit.getWorld("world_bossfight"), 796.0, 101.0, 213.0);
         }
         case "arena_1.5" -> {
-          return new Location(Bukkit.getWorld("world_bossfight"), 717.0, 21.0, 259.0);
+          return new Location(Bukkit.getWorld("world_bossfight"), 996.0, 101.0, 213.0);
         }
         case "arena_1.6" -> {
-          return new Location(Bukkit.getWorld("world_bossfight"), 917.0, 21.0, 259.0);
+          return new Location(Bukkit.getWorld("world_bossfight"), 1196.0, 101.0, 213.0);
         }
         case "arena_1.7" -> {
-          return new Location(Bukkit.getWorld("world_bossfight"), 1117.0, 21.0, 259.0);
+          return new Location(Bukkit.getWorld("world_bossfight"), 1396.0, 101.0, 213.0);
         }
         case "arena_1.8" -> {
-          return new Location(Bukkit.getWorld("world_bossfight"), 1317.0, 21.0, 259.0);
+          return new Location(Bukkit.getWorld("world_bossfight"), 1596.0, 101.0, 213.0);
         }
         case "arena_1.9" -> {
-          return new Location(Bukkit.getWorld("world_bossfight"), 1527.0, 21.0, 259.0);
+          return new Location(Bukkit.getWorld("world_bossfight"), 1796.0, 101.0, 213.0);
         }
         case "arena_2.0" -> {
-          return new Location(Bukkit.getWorld("world_bossfight"), 9, 81, 242);
+          return new Location(Bukkit.getWorld("world_bossfight"), 3, 104, 174);
         }
         case "arena_2.1" -> {
-          return new Location(Bukkit.getWorld("world_bossfight"), 209, 81, 242);
+          return new Location(Bukkit.getWorld("world_bossfight"), 203, 104, 174);
         }
         case "arena_2.2" -> {
-          return new Location(Bukkit.getWorld("world_bossfight"), 409, 81, 242);
+          return new Location(Bukkit.getWorld("world_bossfight"), 403, 104, 174);
         }
         case "arena_2.3" -> {
-          return new Location(Bukkit.getWorld("world_bossfight"), 609, 81, 242);
+          return new Location(Bukkit.getWorld("world_bossfight"), 603, 104, 174);
         }
         case "arena_2.4" -> {
-          return new Location(Bukkit.getWorld("world_bossfight"), 809, 81, 242);
+          return new Location(Bukkit.getWorld("world_bossfight"), 803, 104, 174);
         }
         case "arena_2.5" -> {
-          return new Location(Bukkit.getWorld("world_bossfight"), 1009, 81, 242);
+          return new Location(Bukkit.getWorld("world_bossfight"), 1003, 104, 174);
         }
         case "arena_2.6" -> {
-          return new Location(Bukkit.getWorld("world_bossfight"), 1209, 81, 242);
+          return new Location(Bukkit.getWorld("world_bossfight"), 1203, 104, 174);
         }
         case "arena_2.7" -> {
-          return new Location(Bukkit.getWorld("world_bossfight"), 1409, 81, 242);
+          return new Location(Bukkit.getWorld("world_bossfight"), 1403, 104, 174);
         }
         case "arena_2.8" -> {
-          return new Location(Bukkit.getWorld("world_bossfight"), 1609, 81, 242);
+          return new Location(Bukkit.getWorld("world_bossfight"), 1603, 104, 174);
         }
         case "arena_2.9" -> {
-          return new Location(Bukkit.getWorld("world_bossfight"), 1809, 81, 242);
+          return new Location(Bukkit.getWorld("world_bossfight"), 1803, 104, 174);
         }
       }
       message(player, red("ERROR: AT THIS THERE ARE NO SPAWN LOCATION FOR YOUR ARENA!"));
