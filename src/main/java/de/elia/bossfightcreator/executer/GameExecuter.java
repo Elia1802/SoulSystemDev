@@ -11,7 +11,6 @@ import de.elia.bossfightcreator.arena.Arena;
 import de.elia.bossfightcreator.executer.game.zombie.ZombieGame;
 import de.elia.party.Party;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -61,7 +60,7 @@ public class GameExecuter implements Listener {
 
   /**
    * The event checks if a spawnegg clicked
-   * @param event This event is called if the player interact with an item.
+   * @param event This event is called if the player interacts with an item.
    */
   @EventHandler(priority = EventPriority.HIGHEST)
   private void newGameExecuter(@NotNull PlayerInteractEvent event) {
@@ -75,7 +74,7 @@ public class GameExecuter implements Listener {
       event.setCancelled(true);
       //Create a new zombie game
       createZombieGame(player, event.getItem());
-    //Check if the conditions for zombie game are correct
+    //Check if the conditions for the zombie game are correct
     }else if ((event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) && TheZepserAPI.Item.hasKey(event.getItem(), TheZepserAPI.Item.createKey(Complex.CREEPER_SPAWN_EGG), bossFightCreator().main())) {
       //Cancel this event
       event.setCancelled(true);
@@ -85,7 +84,7 @@ public class GameExecuter implements Listener {
   }
 
   /**
-   * This methode execute a zombie game
+   * This methode executes a zombie game
    * @param player The game owner
    * @param item The spawn egg of the zombie boss
    */
@@ -127,15 +126,17 @@ public class GameExecuter implements Listener {
         logger.logInfo("  -> Arena spawn location: " + spawnLocation(arena.getArenaID(), player));
         //Rebuild the arena
         reBuildArena(arena);
-        //Set the state of the arena to used
+        //Set the state of the arena to use
         arena.setState(USED);
         //log in the console
         logger.logInfo("Arena loaded!");
         logger.logInfo("Arena " + arena.getArenaID() + " is " + arena.getState() + "!");
         logger.logInfo("Start the new Game of " + player.getName());
         //Load the zombie game
-        //this.game = new OldZombieGame(arena, player, plugin, party);
-        this.game = new ZombieGame(BossFightCreatorMain.bossFightCreator().main(), arena, player, Bukkit.getWorld("world").getSpawnLocation(), party, "TEST-V.2.0-ZOMBIE_BOSS-dev");
+        /* TODO: DEPRECATED
+        this.game = new OldZombieGame(arena, player, plugin, party);
+         */
+        this.game = new ZombieGame(BossFightCreatorMain.bossFightCreator().main(), arena, player, spawnLocation(arena.getArenaID(), player), party, "TEST-V.2.0-ZOMBIE_BOSS-dev");
         //Set to the arena a game
         arena.setGame(this.game);
         //log in the console
@@ -154,7 +155,7 @@ public class GameExecuter implements Listener {
   }
 
   /**
-   * This methode execute a creeper game
+   * This methode executes a creeper game
    * @param player The game owner
    * @param item The spawn egg of the creeper boss
    */
@@ -196,14 +197,17 @@ public class GameExecuter implements Listener {
         logger.logInfo("  -> Arena spawn location: " + spawnLocation(arena.getArenaID(), player));
         //Rebuild the arena
         reBuildArena(arena);
-        //Set the state of the arena to used
+        //Set the state of the arena to use
         arena.setState(USED);
         //log in the console
         logger.logInfo("Arena loaded!");
         logger.logInfo("Arena " + arena.getArenaID() + " is " + arena.getState() + "!");
         logger.logInfo("Start the new Game of " + player.getName());
         //Load the zombie game
-        this.game = new CreeperGame(arena, player, plugin, spawnLocation(arena.getArenaID(), player), party);
+        /*
+        this.game = new CreeperGameOld(arena, player, plugin, spawnLocation(arena.getArenaID(), player), party);
+         */
+        this.game = new CreeperGame(arena, player, spawnLocation(arena.getArenaID(), player), party, "TEST-V.2.0-CREEPER_BOSS-dev");
         //Set to the arena a game
         arena.setGame(game);
         //log in the console

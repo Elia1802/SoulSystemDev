@@ -6,15 +6,17 @@ import de.elia.api.game.Game;
 import de.elia.api.logging.PluginLogger;
 import de.elia.api.timing.timer.TimerTasks;
 import de.elia.api.timing.utils.TimerUtils;
+
 import de.elia.bossfightcreator.BossFightCreatorMain;
 import de.elia.bossfightcreator.arena.Arena;
 import de.elia.bossfightcreator.arena.ArenaReBuilder;
-import de.elia.bossfightcreator.executer.game.creeper.CreeperGame;
 import de.elia.party.Party;
 import de.elia.soulboss.entitys.zombie.ZombieBoss;
 import de.elia.systemclasses.keys.NameSpacedKeys;
+
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
@@ -35,6 +37,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -42,8 +45,6 @@ import java.util.Collection;
 import java.util.UUID;
 
 import static de.elia.achivementssystem.achievement.Achievement.giveAchievement;
-import static de.elia.api.entityRegion.EntityRegionBuilder.containsEntity;
-import static de.elia.api.entityRegion.EntityRegionBuilder.createEntityRegionBorder;
 import static de.elia.api.messages.builder.MessageBuilder.darkPurple;
 import static de.elia.api.messages.builder.MessageBuilder.gray;
 import static de.elia.api.messages.builder.MessageBuilder.message;
@@ -119,9 +120,7 @@ public class ZombieGame implements Game, Listener {
             ZombieGame.this.logger.logInfo("The Boss is dead!, End game...");
             ZombieGame.this.logger.logInfo("Start end timer...");
             //Give every game player the achievement
-            ZombieGame.this.gameParty.members().forEach(partyPlayer -> {
-              giveAchievement(partyPlayer, Achievements.BOSSFIGHT_ZOMBIE_END);
-            });
+            ZombieGame.this.gameParty.members().forEach(partyPlayer -> giveAchievement(partyPlayer, Achievements.BOSSFIGHT_ZOMBIE_END));
             //Start end timer
             new ZombieGame.GameEndTimer().start(60*20, null, Bukkit.getWorld("world").getSpawnLocation(), plugin);
           }
